@@ -1,7 +1,5 @@
 # DiscordBot-v2
-Discord bot made using Python with many features including AI chat and music playback
-
-
+Discord bot made using Python with many features including AI chat, music playback, video downloader, and more.
 
 ## Getting Started
 
