@@ -22,6 +22,7 @@ pip install -r requirements.txt
 - **Google API Keys**: Necessary for YouTube and Google Search. Obtain from the Google Cloud Console. [Guide](https://cloud.google.com/docs/authentication/api-keys)
 - **Saucenao API Key**: Get from the SauceNAO website. [Guide](https://saucenao.com/user.php?page=search-api)
 - **Pexels API Key**: Get from the Pexels website. [Guide](https://www.pexels.com/api/documentation/)
+- **Google Gemini AI API KEY:** Get from Google AI Studio. [Here](https://aistudio.google.com/app/apikey)
 
 ### Running the Bot
 
