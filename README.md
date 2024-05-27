@@ -1,5 +1,5 @@
 # DiscordBot-v2
-Discord bot made using python with many features inlcuding AI chat and music playback
+Discord bot made using Python with many features including AI chat and music playback
 
 
 
@@ -8,7 +8,7 @@ Discord bot made using python with many features inlcuding AI chat and music pla
 ### Prerequisites
 
 - Python 3.12
-- FFMPEG insatlled onto system PATH
+- FFMPEG installed onto system PATH
 
 ### Installing Dependencies
 
