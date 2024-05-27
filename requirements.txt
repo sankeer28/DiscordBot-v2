@@ -1,0 +1,7 @@
+discord.py
+discord
+requests
+yt-dlp
+google
+google-generativeai  
+pynacl
