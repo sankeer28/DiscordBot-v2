@@ -7,6 +7,7 @@ Discord bot made using Python with many features including AI chat, music playba
 
 - Python 3.12
 - FFMPEG installed onto system PATH
+- pip
 
 ### Installing Dependencies
 
