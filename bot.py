@@ -303,6 +303,24 @@ async def stop(ctx: commands.Context):
         await voice_clients[ctx.guild.id].disconnect()
     except Exception as e:
         print(e)
-
+      
+@bot.command(name="!help")
+async def help_command(ctx):
+    embed = discord.Embed(
+        title="Bot Commands",
+        description=("Here are the available commands:\n\n"
+                     "`!drake <prompt>`: Generate content using the Generative AI model.\n"
+                     "`!image <query>`: Search for images using Google Custom Search.\n"
+                     "`!google <query>`: Perform a Google search.\n"
+                     "`!youtube <query>`: Search for videos on YouTube.\n"
+                     "`!sauce <image_url>`: Perform a reverse image search using SauceNAO.\n"
+                     "`!pexels <query>`: Search for images on Pexels.\n"
+                     "`!play <URL>`: Play music from the provided URL.\n"
+                     "`!pause`: Pause the currently playing music.\n"
+                     "`!resume`: Resume the paused music.\n"
+                     "`!stop`: Stop the music and disconnect from the voice channel.\n"),
+        color=discord.Color.blue()
+    )
+    await ctx.send(embed=embed)
     
 bot.run('Discord bot token here')
