@@ -58,7 +58,7 @@ python bot.py
 - `sauce <image_url>`: Perform a reverse image search using SauceNAO.
 - `pexels <query>`: Search for images on Pexels.
 - `play <URL>`, `pause`, `resume`, `stop`: Music commands.
-
+## Note: Maximum character output for Gemini AI chat is 2000 characters, to prevent errors, output message will be cut short after 2000 characters
 ## Demo
 
 
