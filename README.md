@@ -59,3 +59,9 @@ python bot.py
 - `pexels <query>`: Search for images on Pexels.
 - `play <URL>`, `pause`, `resume`, `stop`: Music commands.
 
+## Demo
+
+
+https://github.com/sankeer28/DiscordBot-v2/assets/112449287/272f8302-7d9a-481b-8da4-603143ba6a8f
+
+
