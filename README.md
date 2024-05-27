@@ -34,23 +34,24 @@ git clone https://github.com/sankeer28/DiscordBot-v2.git
 2. Navigate to the bot directory:
 
 ```bash
-cd discord-bot
+cd DiscordBot-v2
 ```
 
-3. Fill in the API Keys on missing lines
-4. Run the bot:
+3. Fill in the API Keys on missing lines.
+     - Line 18: Gemini API key
+     - Line 29 - 39: Google API keys, Google search engine id, Saucenao API, Pexels API
+     - Line 309: Discord bot token
+5. Run the bot:
 
 ```bash
 python bot.py
 ```
-
 ## Usage
-
 - `drake <prompt>`: Generate content using the Generative AI model.
 - `image <query>`: Search for images using Google Custom Search.
 - `google <query>`: Perform a Google search.
 - `youtube <query>`: Search for videos on YouTube.
 - `sauce <image_url>`: Perform a reverse image search using SauceNAO.
 - `pexels <query>`: Search for images on Pexels.
-- `play`, `pause`, `resume`, `stop`: Music commands.
+- `play <URL>`, `pause`, `resume`, `stop`: Music commands.
 
