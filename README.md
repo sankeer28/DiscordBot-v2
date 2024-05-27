@@ -56,7 +56,7 @@ python bot.py
 - `youtube <query>`: Search for videos on YouTube.
 - `sauce <image_url>`: Perform a reverse image search using SauceNAO.
 - `pexels <query>`: Search for images on Pexels.
-- `play <URL>`, `pause`, `resume`, `stop`: Music commands.
+- `play <URL>`, `pause`, `resume`, `stop`: Music commands. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
 ## Note: Maximum character output for Gemini AI chat is 2000 characters, to prevent errors, output message will be cut short after 2000 characters
 ## Demo
 
