@@ -7,6 +7,8 @@ import asyncio
 import yt_dlp
 import os
 import google.generativeai as genai
+import aiohttp
+
 bot = commands.Bot(command_prefix='', intents=discord.Intents.all())
 queues = {}
 voice_clients = {}
@@ -21,18 +23,16 @@ model = genai.GenerativeModel('gemini-pro',
                                   {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
                                   {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
                               ])
-
 # API keys here
-google_api_keys = [ # minimum of 1 API key required for Google search feature
-    'fill this with your API Key', 'fill this with your API Key',
-    'fill this with your API Key', 'fill this with your API Key',
-    'fill this with your API Key', 'fill this with your API Key'
+google_api_keys = [
+    'fill this', 'fill this',
+    'fill this', 'fill this'
 ]
 current_api_key_index = 0
-genai.configure(api_key="gemini ai api")
-google_search_engine_id = 'google search engine id'
-saucenao_api_key = 'saucenao api here'
-pexels_api_key = 'pexels api here'
+genai.configure(api_key=" ")
+google_search_engine_id = ' '
+saucenao_api_key = ' '
+pexels_api_key = ' '
 
 
 @bot.event
@@ -305,6 +305,34 @@ async def stop(ctx: commands.Context):
 @bot.tree.command(name='ping', description='Display the latency of the bot!')
 async def ping(interaction: discord.Interaction):
     await interaction.response.send_message(f'Pong! ||{round(bot.latency * 1000)}ms||')
+    
+@bot.command()
+async def download(ctx, url: str):
+    """Download a video from a given URL."""
+    video_path = await download_video(url)
+
+    if video_path:
+        await ctx.send(file=discord.File(video_path))
+        os.remove(video_path)
+    else:
+        await ctx.send("Sorry, I couldn't download the video from that URL.")
+
+    
+async def download_video(url):
+    ydl_opts = {
+        'outtmpl': 'downloads/%(title)s.%(ext)s',
+        'format': 'best',
+        'noplaylist': True
+    }
+
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=True)
+            video_path = ydl.prepare_filename(info)
+            return video_path
+    except Exception as e:
+        print(f"Error downloading video: {e}")
+        return None
 
 @bot.command(name="!help")
 async def help_command(ctx):
@@ -317,12 +345,16 @@ async def help_command(ctx):
                      "`youtube <query>`: Search for videos on YouTube.\n"
                      "`sauce <image_url>`: Perform a reverse image search using SauceNAO.\n"
                      "`pexels <query>`: Search for images on Pexels.\n"
-                     "`play <URL>`: Play music from the provided URL.\n"
+                     "`play <URL>`: Play music from the provided URL.  Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)\n"
                      "`pause`: Pause the currently playing music.\n"
                      "`resume`: Resume the paused music.\n"
-                     "`stop`: Stop the music and disconnect from the voice channel.\n"),
+                     "`stop`: Stop the music and disconnect from the voice channel.\n"
+                     "`download <URL>`: Downloads and returns video to chat. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)\n"
+                     "`cat`: random cat gif.\n"
+                     "`dog`: random dog gif.\n"
+                     ),
         color=discord.Color.blue()
     )
     await ctx.send(embed=embed)
     
-bot.run('Discord bot token here')
+bot.run('token here')
