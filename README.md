@@ -58,6 +58,8 @@ python bot.py
 - `pexels <query>`: Search for images on Pexels.
 - `play <URL>`, `pause`, `resume`, `stop`: Music commands. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
 - `download <URL>`: Downloads and returns video to chat. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
+- `cat`: random cat gif.
+- `dog`: random dog gif.
 ## Note: Maximum character output for Gemini AI chat is 2000 characters, to prevent errors, output message will be cut short after 2000 characters
 
 
