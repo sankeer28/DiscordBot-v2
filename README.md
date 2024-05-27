@@ -40,13 +40,16 @@ cd DiscordBot-v2
 3. Fill in the API Keys on missing lines.
      - Line 18: Gemini API key
      - Line 29 - 39: Google API keys, Google search engine id, Saucenao API, Pexels API
-     - Line 309: Discord bot token
+     - Line 326: Discord bot token
+4. Rename the bot:
+   - Line 47 & 56: change the bot's name from Drake/drake to your liking
+     
 5. Run the bot:
 
 ```bash
 python bot.py
 ```
-## Usage
+## Usage: type !help for all commands
 - `drake <prompt>`: Generate content using the Generative AI model.
 - `image <query>`: Search for images using Google Custom Search.
 - `google <query>`: Perform a Google search.
