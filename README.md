@@ -39,11 +39,10 @@ cd DiscordBot-v2
 ```
 
 3. Fill in the API Keys on missing lines.
-     - Line 18: Gemini API key
-     - Line 29 - 39: Google API keys, Google search engine id, Saucenao API, Pexels API
-     - Line 326: Discord bot token
+     - Line 25-35: Gemini API key, Google API keys, Google search engine id, Saucenao API, Pexels API
+     - Last Line: Discord bot token
 4. Rename the bot:
-   - Line 47 & 56: change the bot's name from Drake/drake to your liking
+   - Line 50 & 59: change the bot's name from Drake/drake to your liking
      
 5. Run the bot:
 
