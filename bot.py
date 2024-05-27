@@ -1,22 +1,18 @@
 import discord
 from discord.ext import commands
+from discord import app_commands
 import requests
 import random
 import asyncio
 import yt_dlp
 import os
-
 import google.generativeai as genai
-
-bot = commands.Bot(command_prefix="", intents=discord.Intents.all())
+bot = commands.Bot(command_prefix='', intents=discord.Intents.all())
 queues = {}
 voice_clients = {}
 yt_dl_options = {"format": "bestaudio/best"}
 ytdl = yt_dlp.YoutubeDL(yt_dl_options)
 ffmpeg_options = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn -filter:a "volume=0.25"'}
-
-genai.configure(api_key="put your API key here")
-
 model = genai.GenerativeModel('gemini-pro',
                               safety_settings=[
                                   {"category": "HARM_CATEGORY_DANGEROUS", "threshold": "BLOCK_NONE"},
@@ -26,21 +22,29 @@ model = genai.GenerativeModel('gemini-pro',
                                   {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
                               ])
 
-google_api_keys = [
-    'put your API keys here', 'put your API keys here',
-    'put your API keys here', 'put your API keys here',
-    'put your API keys here', 'put your API keys here',
-    'put your API keys here', 'put your API keys here'
+# API keys here
+google_api_keys = [ # minimum of 1 API key required for Google search feature
+    'fill this with your API Key', 'fill this with your API Key',
+    'fill this with your API Key', 'fill this with your API Key',
+    'fill this with your API Key', 'fill this with your API Key'
 ]
 current_api_key_index = 0
-google_search_engine_id = 'search engine id here'
-saucenao_api_key = 'saucenao API key here'
-pexels_api_key = 'pexels API key here'
+genai.configure(api_key="gemini ai api")
+google_search_engine_id = 'google search engine id'
+saucenao_api_key = 'saucenao api here'
+pexels_api_key = 'pexels api here'
 
 
 @bot.event
 async def on_ready():
-    print(f"Logged in as: {bot.user.name}!")
+    try:
+        s = await bot.tree.sync()
+        print(f'Synced {len(s)} commands')
+    except Exception as e:
+        print(f'Error syncing commands: {e}')
+    
+    print(f'Logged in as {bot.user.name}')
+
 
 
 @bot.command(name="drake", case_insensitive=True)
@@ -66,12 +70,7 @@ def get_google_api_key():
     api_key = google_api_keys[current_api_key_index]
     current_api_key_index = (current_api_key_index + 1) % len(google_api_keys)
     return api_key
-
-@bot.event
-async def on_ready():
-    print(f"Logged in as: {bot.user.name}!")
     
-
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
@@ -108,7 +107,6 @@ async def fetch_random_dog_gif():
     except Exception as e:
         print(f"An error occurred while fetching random dog GIF: {e}")
         return None
-
 
 @bot.command(name="image")
 async def google_image_search(ctx: commands.Context, *, query: str):
@@ -303,22 +301,26 @@ async def stop(ctx: commands.Context):
         await voice_clients[ctx.guild.id].disconnect()
     except Exception as e:
         print(e)
-      
+        
+@bot.tree.command(name='ping', description='Display the latency of the bot!')
+async def ping(interaction: discord.Interaction):
+    await interaction.response.send_message(f'Pong! ||{round(bot.latency * 1000)}ms||')
+
 @bot.command(name="!help")
 async def help_command(ctx):
     embed = discord.Embed(
         title="Bot Commands",
         description=("Here are the available commands:\n\n"
-                     "`!drake <prompt>`: Generate content using the Generative AI model.\n"
-                     "`!image <query>`: Search for images using Google Custom Search.\n"
-                     "`!google <query>`: Perform a Google search.\n"
-                     "`!youtube <query>`: Search for videos on YouTube.\n"
-                     "`!sauce <image_url>`: Perform a reverse image search using SauceNAO.\n"
-                     "`!pexels <query>`: Search for images on Pexels.\n"
-                     "`!play <URL>`: Play music from the provided URL.\n"
-                     "`!pause`: Pause the currently playing music.\n"
-                     "`!resume`: Resume the paused music.\n"
-                     "`!stop`: Stop the music and disconnect from the voice channel.\n"),
+                     "`drake <prompt>`: Generate content using the Generative AI model.\n"
+                     "`image <query>`: Search for images using Google Custom Search.\n"
+                     "`google <query>`: Perform a Google search.\n"
+                     "`youtube <query>`: Search for videos on YouTube.\n"
+                     "`sauce <image_url>`: Perform a reverse image search using SauceNAO.\n"
+                     "`pexels <query>`: Search for images on Pexels.\n"
+                     "`play <URL>`: Play music from the provided URL.\n"
+                     "`pause`: Pause the currently playing music.\n"
+                     "`resume`: Resume the paused music.\n"
+                     "`stop`: Stop the music and disconnect from the voice channel.\n"),
         color=discord.Color.blue()
     )
     await ctx.send(embed=embed)
