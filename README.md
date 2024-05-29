@@ -18,6 +18,7 @@ Discord bot made using Python with many features including AI chat, music playba
 - Play the audio from the same URLs in voice chat or input a song title.
 - Ask questions regarding uploaded images.
 - Chat history is temporarily saved to memory to have more realistic conversations.
+- Integration with [Sherlock](https://github.com/sherlock-project/sherlock)
 
 ## Running locally
 ### Installing Dependencies
@@ -70,6 +71,7 @@ python bot.py
 - `download <URL>`: Downloads and returns video to chat. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
 - `cat`: random cat gif.
 - `dog`: random dog gif.
+- `sherlock <username>`: returns all sites where the user has created an account.
 ### Note: The bot has a message history feature, it will remember last 10 comments, you can change this number on line 74
 
 
