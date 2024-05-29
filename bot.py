@@ -317,7 +317,13 @@ async def play(ctx: commands.Context):
     except Exception as e:
         print(e)
     try:
-        url = ctx.message.content.split()[1]
+        query = ctx.message.content.split(maxsplit=1)[1]
+        if query.startswith('http'):
+            url = query
+        else:
+            with ytdl:
+                search_result = ytdl.extract_info(f"ytsearch1:{query}", download=False)
+            url = "https://www.youtube.com/watch?v=" + search_result['entries'][0]['id']
         loop = asyncio.get_event_loop()
         data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
         song = data['url']
@@ -390,7 +396,7 @@ async def help_command(ctx):
                      "`youtube <query>`: Search for videos on YouTube.\n"
                      "`sauce <image_url>`: Perform a reverse image search using SauceNAO.\n"
                      "`pexels <query>`: Search for images on Pexels.\n"
-                     "`play <URL>`: Play music from the provided URL.  Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)\n"
+                     "`play <URL or query>`: Play music from the provided URL or search on YT.  Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)\n"
                      "`pause`: Pause the currently playing music.\n"
                      "`resume`: Resume the paused music.\n"
                      "`stop`: Stop the music and disconnect from the voice channel.\n"
