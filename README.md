@@ -15,7 +15,7 @@ Discord bot made using Python with many features including AI chat, music playba
 - Finds the source of images by performing a reverse image search. Supports .png, .jpg, .jpeg, .gif, and .webp.
 - Return images from Pexels.
 - Download URLs from many different sources and return them to the chat including SoundCloud, Youtube, Tiktok, Twitter(X), Instagram and [more](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
-- Play the audio from the same URLs to voice chat
+- Play the audio from the same URLs in voice chat.
 - Ask questions regarding uploaded images.
 - Chat history is temporarily saved to memory to have more realistic conversations.
 
@@ -70,6 +70,6 @@ python bot.py
 - `download <URL>`: Downloads and returns video to chat. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
 - `cat`: random cat gif.
 - `dog`: random dog gif.
-## Note: The bot has a message history feature, it will remember last 10 comments, you can change this number on line 74
+### Note: The bot has a message history feature, it will remember last 10 comments, you can change this number on line 74
 
 
