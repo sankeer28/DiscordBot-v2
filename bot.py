@@ -320,10 +320,12 @@ async def play(ctx: commands.Context):
         query = ctx.message.content.split(maxsplit=1)[1]
         if query.startswith('http'):
             url = query
+            await ctx.send(f"Playing from provided URL: {url}")
         else:
             with ytdl:
                 search_result = ytdl.extract_info(f"ytsearch1:{query}", download=False)
             url = "https://www.youtube.com/watch?v=" + search_result['entries'][0]['id']
+            await ctx.send(f"Playing from search result: {url}")
         loop = asyncio.get_event_loop()
         data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
         song = data['url']
