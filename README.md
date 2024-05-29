@@ -38,10 +38,10 @@ cd DiscordBot-v2
 ```
 
 3. Fill in the API Keys on missing lines.
-     - Line 25-38: Gemini API key, Google API keys, Google search engine id, Saucenao API, Pexels API
+     - Line 26: Gemini API key, Google API keys, Google search engine id, Saucenao API, Pexels API
      - Last Line: Discord bot token
 4. Rename the bot:
-   - Line 53 & 62: change the bot's name from Drake/drake to your liking
+   - Line 79: change the bot's name from drake to your liking
      
 5. Run the bot:
 
@@ -59,6 +59,7 @@ python bot.py
 - `download <URL>`: Downloads and returns video to chat. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
 - `cat`: random cat gif.
 - `dog`: random dog gif.
-## Note: Maximum character output for Gemini AI chat is 2000 characters, to prevent errors, output message will be cut short after 2000 characters
+## Note: You can upload and ask regarding images files such as .png, .jpg, .jpeg, .gif, and .webp
+## Note: The bot has a message history feature, it will remember last 10 comments, you can change this number on line 74
 
 
