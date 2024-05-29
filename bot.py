@@ -383,7 +383,27 @@ async def download_video(url):
     except Exception as e:
         print(f"Error downloading video: {e}")
         return None
-    
+@bot.command(name="sherlock")
+async def sherlock(ctx, username: str):
+    async with ctx.typing():
+        process = await asyncio.create_subprocess_exec(
+            'sherlock', username,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        while True:
+            line = await process.stdout.readline()
+            if not line:
+                break
+            decoded_line = line.decode('utf-8').strip()
+            if decoded_line: 
+                await ctx.send(decoded_line)
+        await process.wait()
+    if process.returncode != 0:
+        error = await process.stderr.read()
+        decoded_error = error.decode('utf-8').strip()
+        if decoded_error:
+            await ctx.send(f"Error: {decoded_error}")
 #----------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------
 
@@ -405,6 +425,7 @@ async def help_command(ctx):
                      "`download <URL>`: Downloads and returns video to chat. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)\n"
                      "`cat`: random cat gif.\n"
                      "`dog`: random dog gif.\n"
+                     "`sherlock <username>`: returns all sites where the user has created an account.\n"
                      ),
         color=discord.Color.blue()
     )
