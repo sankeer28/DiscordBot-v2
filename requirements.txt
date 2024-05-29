@@ -6,3 +6,4 @@ google
 google-generativeai  
 pynacl
 aiohttp
+sherlock-project
