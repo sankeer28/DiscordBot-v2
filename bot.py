@@ -476,7 +476,8 @@ async def help_command(ctx):
                      "`download <URL>`: Downloads and returns video to chat. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)\n"
                      "`cat`: random cat gif.\n"
                      "`dog`: random dog gif.\n"
-                     "`sherlock <username>`: returns all sites where the user has created an account.\n"
+                     "`sherlock <username>`: returns all sites where the user has created an account. Uses [Sherlock-project](https://github.com/sherlock-project/sherlock)\n"
+                     "`expose <username>`: returns all sites where the user has created an account. Uses modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python)\n"
                      ),
         color=discord.Color.blue()
     )
