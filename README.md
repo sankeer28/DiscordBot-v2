@@ -71,7 +71,8 @@ python bot.py
 - `download <URL>`: Downloads and returns video to chat. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
 - `cat`: random cat gif.
 - `dog`: random dog gif.
-- `sherlock <username>`: returns all sites where the user has created an account.
+- `sherlock <username>`: returns all sites where the user has created an account. Uses [Sherlock-project](https://github.com/sherlock-project/sherlock)
+- `expose <username>`: returns all sites where the user has created an account. Uses modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python)
 ### Note: The bot has a message history feature, it will remember last 10 comments, you can change this number on line 74
 
 
