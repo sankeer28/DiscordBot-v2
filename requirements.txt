@@ -7,3 +7,4 @@ google-generativeai
 pynacl
 aiohttp
 sherlock-project
+argparse
