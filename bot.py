@@ -520,7 +520,7 @@ async def help_command(ctx):
                      "`sherlock <username>`: returns all sites where the user has created an account. Uses [Sherlock-project](https://github.com/sherlock-project/sherlock)\n"
                      "`expose <username>`: returns all sites where the user has created an account. Uses modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python)\n"
                      "`/join`: Joins any specified voice channel, even without joining it yourself\n"
-                     "`/speak`: Says anything in voice channel you want using Microsofts's text to speech \n"
+                     "`/speak`: Says anything in voice channel you want using Microsoft's text to speech \n"
                      ),
         color=discord.Color.blue()
     )
