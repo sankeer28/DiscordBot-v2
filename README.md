@@ -1,4 +1,11 @@
-# DiscordBot-v2
+```
+  ____  _                       _ ____        _     __     ______  
+ |  _ \(_)___  ___ ___  _ __ __| | __ )  ___ | |_   \ \   / /___ \ 
+ | | | | / __|/ __/ _ \| '__/ _` |  _ \ / _ \| __|___\ \ / /  __) |
+ | |_| | \__ \ (_| (_) | | | (_| | |_) | (_) | ||_____\ V /  / __/ 
+ |____/|_|___/\___\___/|_|  \__,_|____/ \___/ \__|     \_/  |_____|
+                                                                   
+```
 Discord bot made using Python with many features including AI chat, music playback, video downloader, and more.
 
 ## Getting Started
