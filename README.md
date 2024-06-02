@@ -77,6 +77,6 @@ python bot.py
 - `expose <username>`: returns all sites where the user has created an account. Uses modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python)
 - `/join`: Joins any specified voice channel, even without joining it yourself
 - `/speak`: Says anything in voice channel you want using Microsoft's text to speech. Uses [edge-tts](https://pypi.org/project/edge-tts/)
-### Note: The bot has a message history feature, it will remember last 10 comments, you can change this number on line 74
+### Note: The bot has a message history feature, it will remember the last 10 comments per user, you can change this number on line 74
 
 
