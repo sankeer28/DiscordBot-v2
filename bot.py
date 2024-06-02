@@ -454,6 +454,47 @@ async def expose(ctx, username):
                 await ctx.send(f"The user **{username}** was found on {found_sites} sites.")
             else:
                 await ctx.send(f"No sites found for the user **{username}**.")
+
+voice_clients = {}
+
+@bot.tree.command(name="join", description="Join a specified voice channel")
+@app_commands.describe(channel_name="The name of the voice channel to join")
+async def join(interaction: discord.Interaction, channel_name: str):
+    channel = discord.utils.get(interaction.guild.voice_channels, name=channel_name)
+    if channel is None:
+        await interaction.response.send_message(f"Could not find a channel named '{channel_name}'.", ephemeral=True)
+        return
+
+    try:
+        voice_client = await channel.connect()
+        voice_clients[interaction.guild.id] = voice_client
+        await interaction.response.send_message(f"Joined channel: {channel_name}", ephemeral=True)
+    except Exception as e:
+        await interaction.response.send_message(f"Error connecting to channel: {e}", ephemeral=True)
+
+
+@bot.tree.command(name="speak", description="Convert text to speech and play it in the voice channel")
+@app_commands.describe(text="The text to convert to speech")
+async def speak(interaction: discord.Interaction, text: str):
+    if interaction.user.voice is None or interaction.user.voice.channel is None:
+        await interaction.response.send_message("You need to be in a voice channel to use this command.", ephemeral=True)
+        return
+    voice_channel = interaction.user.voice.channel
+    if interaction.guild.voice_client is not None:
+        await interaction.guild.voice_client.disconnect()
+    try:
+        voice_client = await voice_channel.connect()
+    except Exception as e:
+        await interaction.response.send_message(f"Error connecting to voice channel: {e}", ephemeral=True)
+        return
+    file_path = "output.mp3"
+    command = f'edge-tts --text "{text}" --voice en-US-SteffanNeural --write-media output.mp3 '
+    subprocess.run(command, shell=True, capture_output=True)
+    await asyncio.sleep(5)
+    voice_client.play(discord.FFmpegPCMAudio(file_path), after=lambda e: print('done', e))
+    while voice_client.is_playing():
+        await asyncio.sleep(1)
+    os.remove(file_path)
                 
 #----------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------
@@ -478,6 +519,8 @@ async def help_command(ctx):
                      "`dog`: random dog gif.\n"
                      "`sherlock <username>`: returns all sites where the user has created an account. Uses [Sherlock-project](https://github.com/sherlock-project/sherlock)\n"
                      "`expose <username>`: returns all sites where the user has created an account. Uses modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python)\n"
+                     "`/join`: Joins any specified voice channel, even without joining it yourself\n"
+                     "`/speak`: Says anything in voice channel you want using Microsofts's text to speech \n"
                      ),
         color=discord.Color.blue()
     )
