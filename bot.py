@@ -29,8 +29,7 @@ ffmpeg_options = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconne
 #                                         API KEYS
 #----------------------------------------------------------------------------------------------------------
 google_api_keys = [
-    ' ', ' ',
-    ' ', ' '
+
 ]
 current_api_key_index = 0
 google_search_engine_id = ' '
@@ -313,46 +312,30 @@ async def pexels_search(ctx: commands.Context, *, query: str):
 #----------------------------------------------------------------------------------------------------------
 #                                         Music Playback
 #----------------------------------------------------------------------------------------------------------
-
-voice_clients = {}
-queues = {}
-
-async def play_next(ctx):
-    guild_id = ctx.guild.id
-    if guild_id in queues and queues[guild_id]:
-        next_song = queues[guild_id].pop(0)
-        player = discord.FFmpegOpusAudio(next_song, **ffmpeg_options)
-        voice_clients[guild_id].play(player, after=lambda e: asyncio.run_coroutine_threadsafe(play_next(ctx), bot.loop))
-
 @bot.command(name="play")
 async def play(ctx: commands.Context):
     try:
-        if ctx.author.voice:
-            if ctx.guild.id not in voice_clients:
-                voice_client = await ctx.author.voice.channel.connect()
-                voice_clients[ctx.guild.id] = voice_client
-            query = ctx.message.content.split(maxsplit=1)[1]
-            if query.startswith('http'):
-                url = query
-                await ctx.send(f"Playing from provided URL: {url}")
-            else:
-                with ytdl:
-                    search_result = ytdl.extract_info(f"ytsearch1:{query}", download=False)
-                url = "https://www.youtube.com/watch?v=" + search_result['entries'][0]['id']
-                await ctx.send(f"Playing from search result: {url}")
-            data = await asyncio.get_event_loop().run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
-            song_url = data['url']
-            if ctx.guild.id in queues:
-                queues[ctx.guild.id].append(song_url)
-            else:
-                queues[ctx.guild.id] = [song_url]
-            if not voice_clients[ctx.guild.id].is_playing():
-                await play_next(ctx)
-        else:
-            await ctx.send("You are not connected to a voice channel.")
+        voice_client = await ctx.author.voice.channel.connect()
+        voice_clients[voice_client.guild.id] = voice_client
     except Exception as e:
         print(e)
-        
+    try:
+        query = ctx.message.content.split(maxsplit=1)[1]
+        if query.startswith('http'):
+            url = query
+            await ctx.send(f"Playing from provided URL: {url}")
+        else:
+            with ytdl:
+                search_result = ytdl.extract_info(f"ytsearch1:{query}", download=False)
+            url = "https://www.youtube.com/watch?v=" + search_result['entries'][0]['id']
+            await ctx.send(f"Playing from search result: {url}")
+        loop = asyncio.get_event_loop()
+        data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
+        song = data['url']
+        player = discord.FFmpegOpusAudio(song, **ffmpeg_options)
+        voice_clients[ctx.guild.id].play(player)
+    except Exception as e:
+        print(e)
 
 @bot.command(name="pause")
 async def pause(ctx: commands.Context):
@@ -371,18 +354,8 @@ async def resume(ctx: commands.Context):
 @bot.command(name="stop")
 async def stop(ctx: commands.Context):
     try:
-        if voice_clients[ctx.guild.id].is_playing():
-            voice_clients[ctx.guild.id].stop()
+        voice_clients[ctx.guild.id].stop()
         await voice_clients[ctx.guild.id].disconnect()
-    except Exception as e:
-        print(e)
-
-@bot.command(name="next")
-async def next(ctx: commands.Context):
-    try:
-        if voice_clients[ctx.guild.id].is_playing():
-            voice_clients[ctx.guild.id].stop()
-            await play_next(ctx)
     except Exception as e:
         print(e)
         
@@ -555,7 +528,7 @@ async def help_command(ctx):
                      "`youtube <query>`: Search for videos on YouTube.\n"
                      "`sauce <image_url>`: Perform a reverse image search using SauceNAO.\n"
                      "`pexels <query>`: Search for images on Pexels.\n"
-                     "`play <URL or query>`: Play music from the provided URL or search on YT. Multiple songs will be added to queue. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)\n"
+                     "`play <URL or query>`: Play music from the provided URL or search on YT. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)\n"
                      "`pause`: Pause the currently playing music.\n"
                      "`resume`: Resume the paused music.\n"
                      "`next`: plays next song in queue\n"
