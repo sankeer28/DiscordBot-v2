@@ -8,3 +8,4 @@ pynacl
 aiohttp
 sherlock-project
 argparse
+edge-tts
