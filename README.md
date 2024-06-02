@@ -16,6 +16,7 @@ Discord bot made using Python with many features including AI chat, music playba
 - Return images from Pexels.
 - Download URLs from many different sources and return downloaded videos to the chat including SoundCloud, Youtube, Tiktok, Twitter(X), Instagram and [more](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
 - Play the audio from the same URLs in voice chat or input a song title.
+- Ability to store songs in a queue automatically if multiple play commands are used.
 - Ask questions regarding uploaded images.
 - Chat history is temporarily saved to memory to have more realistic conversations.
 - Integration with [Sherlock](https://github.com/sherlock-project/sherlock) and other OSINT tools.
