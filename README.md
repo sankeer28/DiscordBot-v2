@@ -77,7 +77,7 @@ python bot.py
 - `youtube <query>`: Search for videos on YouTube.
 - `sauce <image_url>`: Perform a reverse image search using SauceNAO.
 - `pexels <query>`: Search for images on Pexels.
-- `play <URL or query>`, `pause`, `resume`, `stop`, `next`: Music commands. Multiple songs will be added to queue. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
+- `play <URL or query>`, `pause`, `resume`, `stop`, `next`: Music commands. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
 - `download <URL>`: Downloads and returns video to chat. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
 - `cat`: random cat gif.
 - `dog`: random dog gif.
