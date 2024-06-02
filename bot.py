@@ -531,7 +531,6 @@ async def help_command(ctx):
                      "`play <URL or query>`: Play music from the provided URL or search on YT. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)\n"
                      "`pause`: Pause the currently playing music.\n"
                      "`resume`: Resume the paused music.\n"
-                     "`next`: plays next song in queue\n"
                      "`stop`: Stop the music and disconnect from the voice channel.\n"
                      "`download <URL>`: Downloads and returns video to chat. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)\n"
                      "`cat`: random cat gif.\n"
