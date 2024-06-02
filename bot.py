@@ -29,7 +29,8 @@ ffmpeg_options = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconne
 #                                         API KEYS
 #----------------------------------------------------------------------------------------------------------
 google_api_keys = [
-    'key here, more than  can be added'
+    ' ', ' ',
+    ' ', ' '
 ]
 current_api_key_index = 0
 google_search_engine_id = ' '
@@ -118,14 +119,11 @@ async def on_message(message):
     await bot.process_commands(message)
 
 async def fetch_random_cat_gif():
-    try:
-        response = requests.get('https://api.thecatapi.com/v1/images/search?mime_types=gif')
-        data = response.json()
-        gif_url = data[0]['url']
-        return gif_url
-    except Exception as e:
-        print(f"An error occurred while fetching random cat GIF: {e}")
-        return None
+    async with aiohttp.ClientSession() as session:
+        async with session.get('https://api.thecatapi.com/v1/images/search?mime_types=gif') as response:
+            data = await response.json()
+            return data[0]['url'] if data else None
+
 
 async def fetch_random_dog_gif():
     try:
@@ -311,31 +309,50 @@ async def pexels_search(ctx: commands.Context, *, query: str):
     photo = random.choice(data['photos'])
     image_url = photo['src']['original']
     await ctx.reply(image_url)
-    
+
+#----------------------------------------------------------------------------------------------------------
+#                                         Music Playback
+#----------------------------------------------------------------------------------------------------------
+
+voice_clients = {}
+queues = {}
+
+async def play_next(ctx):
+    guild_id = ctx.guild.id
+    if guild_id in queues and queues[guild_id]:
+        next_song = queues[guild_id].pop(0)
+        player = discord.FFmpegOpusAudio(next_song, **ffmpeg_options)
+        voice_clients[guild_id].play(player, after=lambda e: asyncio.run_coroutine_threadsafe(play_next(ctx), bot.loop))
+
 @bot.command(name="play")
 async def play(ctx: commands.Context):
     try:
-        voice_client = await ctx.author.voice.channel.connect()
-        voice_clients[voice_client.guild.id] = voice_client
-    except Exception as e:
-        print(e)
-    try:
-        query = ctx.message.content.split(maxsplit=1)[1]
-        if query.startswith('http'):
-            url = query
-            await ctx.send(f"Playing from provided URL: {url}")
+        if ctx.author.voice:
+            if ctx.guild.id not in voice_clients:
+                voice_client = await ctx.author.voice.channel.connect()
+                voice_clients[ctx.guild.id] = voice_client
+            query = ctx.message.content.split(maxsplit=1)[1]
+            if query.startswith('http'):
+                url = query
+                await ctx.send(f"Playing from provided URL: {url}")
+            else:
+                with ytdl:
+                    search_result = ytdl.extract_info(f"ytsearch1:{query}", download=False)
+                url = "https://www.youtube.com/watch?v=" + search_result['entries'][0]['id']
+                await ctx.send(f"Playing from search result: {url}")
+            data = await asyncio.get_event_loop().run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
+            song_url = data['url']
+            if ctx.guild.id in queues:
+                queues[ctx.guild.id].append(song_url)
+            else:
+                queues[ctx.guild.id] = [song_url]
+            if not voice_clients[ctx.guild.id].is_playing():
+                await play_next(ctx)
         else:
-            with ytdl:
-                search_result = ytdl.extract_info(f"ytsearch1:{query}", download=False)
-            url = "https://www.youtube.com/watch?v=" + search_result['entries'][0]['id']
-            await ctx.send(f"Playing from search result: {url}")
-        loop = asyncio.get_event_loop()
-        data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
-        song = data['url']
-        player = discord.FFmpegOpusAudio(song, **ffmpeg_options)
-        voice_clients[ctx.guild.id].play(player)
+            await ctx.send("You are not connected to a voice channel.")
     except Exception as e:
         print(e)
+        
 
 @bot.command(name="pause")
 async def pause(ctx: commands.Context):
@@ -354,10 +371,24 @@ async def resume(ctx: commands.Context):
 @bot.command(name="stop")
 async def stop(ctx: commands.Context):
     try:
-        voice_clients[ctx.guild.id].stop()
+        if voice_clients[ctx.guild.id].is_playing():
+            voice_clients[ctx.guild.id].stop()
         await voice_clients[ctx.guild.id].disconnect()
     except Exception as e:
         print(e)
+
+@bot.command(name="next")
+async def next(ctx: commands.Context):
+    try:
+        if voice_clients[ctx.guild.id].is_playing():
+            voice_clients[ctx.guild.id].stop()
+            await play_next(ctx)
+    except Exception as e:
+        print(e)
+        
+#----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------
+
         
 @bot.tree.command(name='ping', description='Display the latency of the bot!')
 async def ping(interaction: discord.Interaction):
@@ -386,6 +417,7 @@ async def download_video(url):
     except Exception as e:
         print(f"Error downloading video: {e}")
         return None
+    
 @bot.command(name="sherlock")
 async def sherlock(ctx, username: str):
     async with ctx.typing():
@@ -407,6 +439,7 @@ async def sherlock(ctx, username: str):
         decoded_error = error.decode('utf-8').strip()
         if decoded_error:
             await ctx.send(f"Error: {decoded_error}")
+            
             
 def check_site(site, username, headers, session):
     uri_check = site["uri_check"].format(account=username)
@@ -438,6 +471,7 @@ async def expose(ctx, username):
             try:
                 with ThreadPoolExecutor() as executor:
                     futures = {executor.submit(check_site, site, username, headers, session): site for site in sites}
+
                     for future in as_completed(futures):
                         try:
                             result = future.result()
@@ -464,7 +498,6 @@ async def join(interaction: discord.Interaction, channel_name: str):
     if channel is None:
         await interaction.response.send_message(f"Could not find a channel named '{channel_name}'.", ephemeral=True)
         return
-
     try:
         voice_client = await channel.connect()
         voice_clients[interaction.guild.id] = voice_client
@@ -480,25 +513,37 @@ async def speak(interaction: discord.Interaction, text: str):
         await interaction.response.send_message("You need to be in a voice channel to use this command.", ephemeral=True)
         return
     voice_channel = interaction.user.voice.channel
-    if interaction.guild.voice_client is not None:
-        await interaction.guild.voice_client.disconnect()
-    try:
-        voice_client = await voice_channel.connect()
-    except Exception as e:
-        await interaction.response.send_message(f"Error connecting to voice channel: {e}", ephemeral=True)
-        return
+    voice_client = interaction.guild.voice_client
+    if voice_client is None:
+        try:
+            voice_client = await voice_channel.connect()
+        except Exception as e:
+            await interaction.response.send_message(f"Error connecting to voice channel: {e}", ephemeral=True)
+            return
+    elif voice_client.channel != voice_channel:
+        await voice_client.move_to(voice_channel)
+    if voice_client.is_playing():
+        voice_client.stop()
+
     file_path = "output.mp3"
-    command = f'edge-tts --text "{text}" --voice en-US-SteffanNeural --write-media output.mp3 '
+    command = f'edge-tts --text "{text}" --voice en-US-SteffanNeural --write-media {file_path}'
     subprocess.run(command, shell=True, capture_output=True)
-    await asyncio.sleep(5)
-    voice_client.play(discord.FFmpegPCMAudio(file_path), after=lambda e: print('done', e))
+    await asyncio.sleep(1)
+    def after_playing(error):
+        if error:
+            print(f'Error ')
+        else:
+            print('Text-to-speech finished successfully.')
+        asyncio.run_coroutine_threadsafe(voice_client.disconnect(), bot.loop)
+    voice_client.play(discord.FFmpegPCMAudio(file_path), after=after_playing)
     while voice_client.is_playing():
         await asyncio.sleep(1)
     os.remove(file_path)
-                
-#----------------------------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------------------------
+    await interaction.response.send_message("Finished playing the text-to-speech message.", ephemeral=True)
 
+
+#----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------
 @bot.command(name="!help")
 async def help_command(ctx):
     embed = discord.Embed(
@@ -510,9 +555,10 @@ async def help_command(ctx):
                      "`youtube <query>`: Search for videos on YouTube.\n"
                      "`sauce <image_url>`: Perform a reverse image search using SauceNAO.\n"
                      "`pexels <query>`: Search for images on Pexels.\n"
-                     "`play <URL or query>`: Play music from the provided URL or search on YT.  Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)\n"
+                     "`play <URL or query>`: Play music from the provided URL or search on YT. Multiple songs will be added to queue. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)\n"
                      "`pause`: Pause the currently playing music.\n"
                      "`resume`: Resume the paused music.\n"
+                     "`next`: plays next song in queue\n"
                      "`stop`: Stop the music and disconnect from the voice channel.\n"
                      "`download <URL>`: Downloads and returns video to chat. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)\n"
                      "`cat`: random cat gif.\n"
@@ -525,13 +571,13 @@ async def help_command(ctx):
         color=discord.Color.blue()
     )
     await ctx.send(embed=embed)
-    
+
     
 #----------------------------------------------------------------------------------------------------------
 #                                         DISCORD TOKEN
 #----------------------------------------------------------------------------------------------------------
 
-bot.run(' key here')
+bot.run(' ')
 
 #----------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------
