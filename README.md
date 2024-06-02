@@ -9,12 +9,12 @@ Discord bot made using Python with many features including AI chat, music playba
 - FFMPEG installed onto system PATH
 - pip
 ## Features 
-- Chat with the bot casually by calling its name.
+- Chat with the bot casually by calling its name and get immediate responses using Gemini AI.
 - Returns images from Google.
 - Search YouTube for videos.
 - Finds the source of images by performing a reverse image search. Supports .png, .jpg, .jpeg, .gif, and .webp.
 - Return images from Pexels.
-- Download URLs from many different sources and return them to the chat including SoundCloud, Youtube, Tiktok, Twitter(X), Instagram and [more](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
+- Download URLs from many different sources and return downloaded video to the chat including SoundCloud, Youtube, Tiktok, Twitter(X), Instagram and [more](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
 - Play the audio from the same URLs in voice chat or input a song title.
 - Ask questions regarding uploaded images.
 - Chat history is temporarily saved to memory to have more realistic conversations.
