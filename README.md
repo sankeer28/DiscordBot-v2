@@ -28,7 +28,7 @@ Discord bot made using Python with many features including AI chat, music playba
 - Integration with [Sherlock](https://github.com/sherlock-project/sherlock) and other OSINT tools.
 - Ability to join any voice channel in the server without the need to join the voice channel yourself.
 - Ability to speak using text-to-speech in voice chat, allowing the bot to say whatever you want.
-- Generate nightcore videos or slowed down videos
+- Generate nightcore videos or slowed-down videos, Uses my personal [project: Spedup-Slowed-MV](https://github.com/sankeer28/Spedup-Slowed-MV)
 
 ## Running locally
 ### Installing Dependencies
