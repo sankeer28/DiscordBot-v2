@@ -1,4 +1,4 @@
-import discord
+https://github.com/sankeer28/DiscordBot-v2/blob/main/bot.pyimport discord
 from discord.ext import commands
 from discord import app_commands
 import requests
@@ -514,6 +514,124 @@ async def speak(interaction: discord.Interaction, text: str):
     os.remove(file_path)
     await interaction.response.send_message("Finished playing the text-to-speech message.", ephemeral=True)
 
+#----------------------------------------------------------------------------------------------------------
+#                                              NIGHTCORE                               
+#----------------------------------------------------------------------------------------------------------
+
+def download_video(url, output_file):
+    ydl_opts = {
+        'outtmpl': output_file,
+        'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+    }
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([url])
+
+def extract_audio(video_file, output_audio, pitch=1.4):
+    command = f'ffmpeg -i "{video_file}" -vn -af "asetrate=44100*{pitch},aresample=44100" -acodec libmp3lame "{output_audio}"'
+    os.system(command)
+
+def download_image(image_filename, api_choice, search_query=None):
+    try:
+        if api_choice == "anime":
+            response = requests.get("https://pic.re/image")
+            response.raise_for_status()
+            image_url = response.url
+        elif api_choice == "cat":
+            response = requests.get("https://api.thecatapi.com/v1/images/search")
+            response.raise_for_status()
+            data = response.json()
+            if not data or 'url' not in data[0]:
+                print("Error: No image URL found in response data.")
+                return
+            image_url = data[0]['url']
+        elif api_choice == "random":
+            response = requests.get("https://random.imagecdn.app/v1/image?width=1920&height=1080&format=json")
+            response.raise_for_status()
+            data = response.json()
+            if not data or 'url' not in data:
+                print("Error: No image URL found in response data.")
+                return
+            image_url = data['url']
+        elif api_choice == "pexels":
+            headers = {
+                'Authorization': pexels_api_key
+            }
+            params = {
+                'query': search_query,
+                'per_page': 1,
+                'orientation': 'landscape',
+            }
+            response = requests.get('https://api.pexels.com/v1/search', headers=headers, params=params)
+            response.raise_for_status()
+            data = response.json()
+            if not data['photos']:
+                print("Error: No image found for the given search query.")
+                return
+            image_url = data['photos'][0]['src']['large']
+        else:
+            print("Invalid API choice.")
+            return
+
+        image_data = requests.get(image_url).content
+        with open(image_filename, 'wb') as f:
+            f.write(image_data)
+    except Exception as e:
+        print(f"Error fetching image: {e}")
+
+def combine_video_audio_image(image_file, audio_file, output_video, video_title):
+    try:
+        resized_image_file = "resized_" + image_file
+        resize_command = f'ffmpeg -i "{image_file}" -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" "{resized_image_file}" -y'
+        os.system(resize_command)
+        text = re.sub(r'\(.*?\)', '', re.sub(r'[\\/:*?"<>|]', '', video_title.replace("_", " ").replace("nightcore", "").strip()))
+        text_command = f'ffmpeg -loop 1 -i "{resized_image_file}" -vf "drawtext=text=\'{text}\':x=w-tw-10:y=h-th-10:fontsize=40:fontcolor=black:shadowcolor=white:shadowx=2:shadowy=2" -r 30 "{image_file}_with_text.jpg"'
+        os.system(text_command)
+        command = f'ffmpeg -loop 1 -i "{image_file}_with_text.jpg" -i "{audio_file}" -c:v libx264 -c:a aac -strict experimental -b:a 192k -shortest "{output_video}"'
+        os.system(command)
+        os.remove(resized_image_file)
+        os.remove(f"{image_file}_with_text.jpg")
+    except Exception as e:
+        print(f"Error combining video and audio: {e}")
+
+@bot.tree.command(name="nightcore", description="Convert a YouTube video to nightcore")
+@app_commands.describe(
+    url="The YouTube video URL",
+    image_choice="The choice of background image",
+    audio_speed="The choice of audio speed",
+    search_query="The search query for Pexels image (only used if image_choice is 'pexels')"
+)
+@app_commands.choices(
+    image_choice=[
+        app_commands.Choice(name="Anime", value="anime"),
+        app_commands.Choice(name="Cat", value="cat"),
+        app_commands.Choice(name="Random", value="random"),
+        app_commands.Choice(name="Pexels", value="pexels")
+    ],
+    audio_speed=[
+        app_commands.Choice(name="Spedup", value="fast"),
+        app_commands.Choice(name="Slowed", value="slow")
+    ]
+)
+async def nightcore(interaction: discord.Interaction, url: str, image_choice: app_commands.Choice[str], audio_speed: app_commands.Choice[str], search_query: str = None):
+    await interaction.response.defer()
+    video_info = yt_dlp.YoutubeDL().extract_info(url, download=False)
+    video_title = "nightcore_" + re.sub(r'[\\/:*?"<>|]', '', video_info['title'].replace(" ", "_"))
+    video_filename = "video.mp4"
+    audio_filename = "audio.mp3"
+    image_filename = "background_image.jpg"
+    output_video = f"{video_title}.mp4"
+    download_video(url, video_filename)
+    pitch = 1.4 if audio_speed.value == "fast" else 0.9
+    extract_audio(video_filename, audio_filename, pitch=pitch)
+    download_image(image_filename, image_choice.value, search_query)
+    combine_video_audio_image(image_filename, audio_filename, output_video, video_title)
+    await interaction.followup.send(file=discord.File(output_video))
+    os.remove(video_filename)
+    os.remove(audio_filename)
+    os.remove(image_filename)
+    os.remove(output_video)
+
+
 
 #----------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------
@@ -539,6 +657,8 @@ async def help_command(ctx):
                      "`expose <username>`: returns all sites where the user has created an account. Uses modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python)\n"
                      "`/join`: Joins any specified voice channel, even without joining it yourself\n"
                      "`/speak`: Says anything in voice channel you want using Microsoft's text to speech \n"
+                     "`/nightcore`: creates nightcore video or slowed down video given URL. Uses my personal [project](https://github.com/sankeer28/Spedup-Slowed-MV) \n"
+
                      ),
         color=discord.Color.blue()
     )
