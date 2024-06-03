@@ -478,7 +478,6 @@ async def join(interaction: discord.Interaction, channel_name: str):
     except Exception as e:
         await interaction.response.send_message(f"Error connecting to channel: {e}", ephemeral=True)
 
-
 @bot.tree.command(name="speak", description="Convert text to speech and play it in the voice channel")
 @app_commands.describe(text="The text to convert to speech")
 async def speak(interaction: discord.Interaction, text: str):
@@ -488,31 +487,30 @@ async def speak(interaction: discord.Interaction, text: str):
     voice_channel = interaction.user.voice.channel
     voice_client = interaction.guild.voice_client
     if voice_client is None:
-        try:
-            voice_client = await voice_channel.connect()
-        except Exception as e:
-            await interaction.response.send_message(f"Error connecting to voice channel: {e}", ephemeral=True)
-            return
-    elif voice_client.channel != voice_channel:
+        await interaction.response.send_message("I'm not connected to a voice channel. Please make sure I'm in the same voice channel as you. use /join", ephemeral=True)
+        return
+    if voice_client.channel != voice_channel:
         await voice_client.move_to(voice_channel)
     if voice_client.is_playing():
         voice_client.stop()
-
     file_path = "output.mp3"
     command = f'edge-tts --text "{text}" --voice en-US-SteffanNeural --write-media {file_path}'
     subprocess.run(command, shell=True, capture_output=True)
     await asyncio.sleep(1)
     def after_playing(error):
         if error:
-            print(f'Error ')
+            print(f'Error: {error}')
         else:
             print('Text-to-speech finished successfully.')
-        asyncio.run_coroutine_threadsafe(voice_client.disconnect(), bot.loop)
+        if voice_client.is_playing():
+            voice_client.stop()
     voice_client.play(discord.FFmpegPCMAudio(file_path), after=after_playing)
     while voice_client.is_playing():
         await asyncio.sleep(1)
-    os.remove(file_path)
+    os.remove(file_path)  
     await interaction.response.send_message("Finished playing the text-to-speech message.", ephemeral=True)
+
+
 
 #----------------------------------------------------------------------------------------------------------
 #                                              NIGHTCORE                               
