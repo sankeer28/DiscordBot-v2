@@ -28,6 +28,7 @@ Discord bot made using Python with many features including AI chat, music playba
 - Integration with [Sherlock](https://github.com/sherlock-project/sherlock) and other OSINT tools.
 - Ability to join any voice channel in the server without the need to join the voice channel yourself.
 - Ability to speak using text-to-speech in voice chat, allowing the bot to say whatever you want.
+- Generate nightcore videos or slowed down videos
 
 ## Running locally
 ### Installing Dependencies
@@ -84,6 +85,7 @@ python bot.py
 - `expose <username>`: returns all sites where the user has created an account. Uses modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python)
 - `/join`: Joins any specified voice channel, even without joining it yourself
 - `/speak`: Says anything in voice channel you want using Microsoft's text to speech. Uses [edge-tts](https://pypi.org/project/edge-tts/)
+- `/nightcore`: creates nightcore video or slowed down video given URL. Uses my personal [project](https://github.com/sankeer28/Spedup-Slowed-MV)
 ### Note: The bot has a message history feature, it will remember the last 10 comments per user, you can change this number on line 74
 
 
