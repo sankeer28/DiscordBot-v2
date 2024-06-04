@@ -1,4 +1,4 @@
-https://github.com/sankeer28/DiscordBot-v2/blob/main/bot.pyimport discord
+import discord
 from discord.ext import commands
 from discord import app_commands
 import requests
@@ -29,13 +29,14 @@ ffmpeg_options = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconne
 #                                         API KEYS
 #----------------------------------------------------------------------------------------------------------
 google_api_keys = [
-
+    '', '',
+    '', ''
 ]
 current_api_key_index = 0
-google_search_engine_id = ' '
-saucenao_api_key = ' '
-pexels_api_key = ' '
-genai.configure(api_key=" ")
+google_search_engine_id = ''
+saucenao_api_key = ''
+pexels_api_key = ''
+genai.configure(api_key="")
 
 
 #----------------------------------------------------------------------------------------------------------
@@ -369,14 +370,14 @@ async def ping(interaction: discord.Interaction):
     
 @bot.command()
 async def download(ctx, url: str):
-    video_path = await download_video(url)
+    video_path = await download_video1(url)
     if video_path:
         await ctx.send(file=discord.File(video_path))
         os.remove(video_path)
     else:
         await ctx.send("Sorry, I couldn't download the video from that URL.")
     
-async def download_video(url):
+async def download_video1(url):
     ydl_opts = {
         'outtmpl': 'downloads/%(title)s.%(ext)s',
         'format': 'best',
@@ -667,7 +668,7 @@ async def help_command(ctx):
 #                                         DISCORD TOKEN
 #----------------------------------------------------------------------------------------------------------
 
-bot.run(' ')
+bot.run('  ')
 
 #----------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------
