@@ -71,7 +71,7 @@ cd DiscordBot-v2
 python bot.py
 ```
 ## Usage: type !help for all commands
-- `drake <prompt>`: Generate content using the Generative AI model.
+- `drake <prompt>`: Generate content using the Generative AI model. **Name of bot is customizable**.
 - `image <query>`: Search for images using Google Custom Search.
 - `google <query>`: Perform a Google search.
 - `youtube <query>`: Search for videos on YouTube.
