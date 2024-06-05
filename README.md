@@ -96,22 +96,25 @@ cd DiscordBot-v2
 python bot.py
 ```
 ## Usage: type !help for all commands
-- `drake <prompt>`: Generate content using the Generative AI model. **Name of bot is customizable**.
-- `image <query>`: Search for images using Google Custom Search.
-- `google <query>`: Perform a Google search.
-- `youtube <query>`: Search for videos on YouTube.
-- `sauce <image_url>`: Perform a reverse image search using SauceNAO.
-- `pexels <query>`: Search for images on Pexels.
-- `play <URL or query>`, `pause`, `resume`, `stop` : Music commands. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
-- `download <URL>`: Downloads and returns video to chat. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
-- `cat`: random cat gif.
-- `dog`: random dog gif.
-- `sherlock <username>`: returns all sites where the user has created an account. Uses [Sherlock-project](https://github.com/sherlock-project/sherlock)
-- `expose <username> --html <--optional argument for html `: returns all sites where the user has created an account. Uses modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python)
-- `socialscan <username or email>`: accurately querying username and email usage on online platforms. Uses [socialscan](https://github.com/iojw/socialscan) 
-- `/join`: Joins any specified voice channel, even without joining it yourself
-- `/speak`: Says anything in voice channel you want using Microsoft's text to speech. Uses [edge-tts](https://pypi.org/project/edge-tts/)
-- `/nightcore`: creates nightcore video or slowed down video given URL. Uses my personal [project](https://github.com/sankeer28/Spedup-Slowed-MV)
+| Command                               | Description                                                                                                    |
+|---------------------------------------|----------------------------------------------------------------------------------------------------------------|
+| `drake <prompt>`                      | Generate content using the Generative AI model. **Name of bot is customizable**.                                |
+| `image <query>`                       | Search for images using Google Custom Search.                                                                  |
+| `google <query>`                      | Perform a Google search.                                                                                       |
+| `youtube <query>`                     | Search for videos on YouTube.                                                                                  |
+| `sauce <image_url>`                   | Perform a reverse image search using SauceNAO.                                                                 |
+| `pexels <query>`                      | Search for images on Pexels.                                                                                   |
+| `play <URL or query>`, `pause`, `resume`, `stop` | Music commands. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) |
+| `download <URL>`                      | Downloads and returns video to chat. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) |
+| `cat`                                 | Random cat gif.                                                                                                |
+| `dog`                                 | Random dog gif.                                                                                                |
+| `sherlock <username>`                 | Returns all sites where the user has created an account. Uses [Sherlock-project](https://github.com/sherlock-project/sherlock) |
+| `expose <username> --html`            | Returns all sites where the user has created an account. Uses modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python) |
+| `socialscan <username or email>`      | Accurately querying username and email usage on online platforms. Uses [socialscan](https://github.com/iojw/socialscan) |
+| `/join`                               | Joins any specified voice channel, even without joining it yourself                                             |
+| `/speak`                              | Says anything in voice channel you want using Microsoft's text to speech. Uses [edge-tts](https://pypi.org/project/edge-tts/) |
+| `/nightcore`                          | Creates nightcore video or slowed down video given URL. Uses my personal [project](https://github.com/sankeer28/Spedup-Slowed-MV) |
+
   
 ### Note: The bot has a message history feature, it will remember the last 10 comments per user, you can change this number on line 82
 ## To use the command maigret <username>
