@@ -46,7 +46,7 @@ Discord bot made using Python with many features including AI chat, music playba
 - Plays audio from the various [sources](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) in voice chat using the ```play``` command.
 
 ### Video Manipulation 📹:
-- Generates [nightcore](https://en.wikipedia.org/wiki/Nightcore) videos or slowed-down videos using the [Spedup-Slowed-MV](https://github.com/sankeer28/Spedup-Slowed-MV) project.
+- Generates [nightcore](https://en.wikipedia.org/wiki/Nightcore) videos or slowed-down videos using my project [Spedup-Slowed-MV](https://github.com/sankeer28/Spedup-Slowed-MV).
 
 
 ## Running locally
