@@ -42,7 +42,13 @@ Discord bot made using Python with many features including AI chat, music playba
 
 ### Voice Chat 🎙️:
 - Joins any voice channel in the server without the need for manual intervention.
-- Utilizes text-to-speech in voice chat, allowing the bot to vocalize text input.
+<details>
+  <summary>Utilizes text-to-speech in voice chat, allowing the bot to vocalize text input</summary>
+
+https://github.com/sankeer28/DiscordBot-v2/assets/112449287/32db7e02-0132-462f-9786-edba88e0509b
+
+ </details>
+
 - Plays audio from the various [sources](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) in voice chat using the ```play``` command.
 
 ### Video Manipulation 📹:
