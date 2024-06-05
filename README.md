@@ -114,7 +114,7 @@ python bot.py
 - `/nightcore`: creates nightcore video or slowed down video given URL. Uses my personal [project](https://github.com/sankeer28/Spedup-Slowed-MV)
   
 ### Note: The bot has a message history feature, it will remember the last 10 comments per user, you can change this number on line 82
-### To use the command maigret <username>
+## To use the command maigret <username>
 - You are required to use Python 3.10 and must manually install maigret by ``` pip install maigret ```
 - Has not been added to !help as it is limited to a specific version of python
 - This feature uses [maigret](https://github.com/soxoj/maigret) takes in a username and returns a pdf report
