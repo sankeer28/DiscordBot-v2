@@ -30,8 +30,8 @@ ffmpeg_options = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconne
 #                                         API KEYS
 #----------------------------------------------------------------------------------------------------------
 google_api_keys = [
-    '', '',
-    '', ''
+    ' ', ' ',
+    ' ', ' '
 ]
 current_api_key_index = 0
 google_search_engine_id = ' '
@@ -64,6 +64,47 @@ async def on_ready():
     print('Bot is currently in the following servers:')
     for guild in bot.guilds:
         print(f'{guild.name} - {guild.id}')
+ 
+#----------------------------------------------------------------------------------------------------------
+#                                          SERVER LOGS
+#----------------------------------------------------------------------------------------------------------
+       
+
+import json       
+if not os.path.exists('servers'):
+    os.makedirs('servers')
+    
+@bot.event
+async def on_ready():
+    print(f'{bot.user} has connected to Discord!')
+    for guild in bot.guilds:
+        print(f"Processing server: {guild.name}") 
+        server_info = {
+            "server_name": guild.name,
+            "members": []
+        }
+        for member in guild.members:
+            if not member.bot: 
+                member_info = {
+                    "user_id": member.id,  
+                    "username": member.name,
+                    "server_nickname": member.nick,
+                    "about_me": member.activity.name if member.activity else ""
+                }
+                
+                server_info["members"].append(member_info)
+        
+        server_file_path = os.path.join('servers', f'{guild.name}.json')
+        with open(server_file_path, 'w') as server_file:
+            json.dump(server_info, server_file, indent=4)
+        
+        print(f"Server {guild.name} info logged to {server_file_path}") 
+
+    print("Server information logged successfully.")
+
+
+#----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------
 
 
 def get_google_api_key():
@@ -318,30 +359,49 @@ async def pexels_search(ctx: commands.Context, *, query: str):
 #----------------------------------------------------------------------------------------------------------
 #                                         Music Playback
 #----------------------------------------------------------------------------------------------------------
+
+loop_status = {}
+
 @bot.command(name="play")
 async def play(ctx: commands.Context):
     try:
         voice_client = await ctx.author.voice.channel.connect()
         voice_clients[voice_client.guild.id] = voice_client
+        loop_status[ctx.guild.id] = False  
     except Exception as e:
         print(e)
     try:
         query = ctx.message.content.split(maxsplit=1)[1]
         if query.startswith('http'):
             url = query
-            await ctx.send(f"Playing from provided URL: {url}")
+            message = await ctx.send(f"Playing from provided URL: {url}")
         else:
             with ytdl:
                 search_result = ytdl.extract_info(f"ytsearch1:{query}", download=False)
             url = "https://www.youtube.com/watch?v=" + search_result['entries'][0]['id']
-            await ctx.send(f"Playing from search result: {url}")
+            message = await ctx.send(f"Playing from search result: {url}")
+        await message.add_reaction('🔁')
+        await ctx.send("React to 🔁 to enable loop, react again to stop loop") 
         loop = asyncio.get_event_loop()
         data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
         song = data['url']
         player = discord.FFmpegOpusAudio(song, **ffmpeg_options)
-        voice_clients[ctx.guild.id].play(player)
+        voice_clients[ctx.guild.id].play(player, after=lambda e: play_next(ctx))
     except Exception as e:
         print(e)
+
+def play_next(ctx):
+    if loop_status[ctx.guild.id]:
+        bot.loop.create_task(play(ctx))
+
+@bot.event
+async def on_reaction_add(reaction, user):
+    if user == bot.user:
+        return
+    if reaction.emoji == '🔁' and reaction.message.author == bot.user:  
+        loop_status[reaction.message.guild.id] = not loop_status[reaction.message.guild.id] 
+        status = "enabled" if loop_status[reaction.message.guild.id] else "disabled"
+        await reaction.message.channel.send(f"Loop has been {status}")
 
 @bot.command(name="pause")
 async def pause(ctx: commands.Context):
@@ -361,6 +421,7 @@ async def resume(ctx: commands.Context):
 async def stop(ctx: commands.Context):
     try:
         voice_clients[ctx.guild.id].stop()
+        loop_status[ctx.guild.id] = False  
         await voice_clients[ctx.guild.id].disconnect()
     except Exception as e:
         print(e)
@@ -563,6 +624,8 @@ async def socialscan_search(ctx, username):
             await indicator_msg.delete() 
         except Exception as e:
             await ctx.send(f"An error occurred: {e}")
+            
+
 
 #----------------------------------------------------------------------------------------------------------
 #                                              NIGHTCORE                               
