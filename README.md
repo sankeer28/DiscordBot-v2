@@ -15,20 +15,39 @@ Discord bot made using Python with many features including AI chat, music playba
 - Python 3.12
 - FFMPEG installed onto system PATH
 - pip
-## Features 
-- Chat with the bot casually by calling its name and get immediate responses using Gemini AI.
-- Returns images from Google.
-- Search YouTube for videos.
-- Finds the source of images by performing a reverse image search. Supports .png, .jpg, .jpeg, .gif, and .webp.
-- Return images from Pexels.
-- Download URLs from many different sources and return downloaded videos to the chat including SoundCloud, Youtube, Tiktok, Twitter(X), Instagram and [more](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
-- Play the audio from the same URLs in voice chat or input a song title.
-- Ask questions regarding uploaded images.
-- Chat history is temporarily saved to memory to have more realistic conversations.
-- Integration with [Sherlock](https://github.com/sherlock-project/sherlock) and other OSINT tools including [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python) and [socialscan](https://github.com/iojw/socialscan).
-- Ability to join any voice channel in the server without the need to join the voice channel yourself.
-- Ability to speak using text-to-speech in voice chat, allowing the bot to say whatever you want.
-- Generate nightcore videos or slowed-down videos, Uses my personal [project: Spedup-Slowed-MV](https://github.com/sankeer28/Spedup-Slowed-MV)
+
+# Features
+### Chat Interaction:
+- Casual chat with the bot using its name.
+- Immediate responses using Gemini AI.
+- Chat history temporarily saved to memory for more realistic conversations.
+
+### Media Retrieval:
+- Returns images from [Google](https://www.google.com).
+- Searches [YouTube](https://www.youtube.com) for videos.
+- Returns images from [Pexels](https://www.pexels.com).
+- Downloads URLs from various sources including [SoundCloud](https://soundcloud.com), [YouTube](https://www.youtube.com), [TikTok](https://www.tiktok.com), [Twitter](https://twitter.com), [Instagram](https://www.instagram.com), and [more](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
+
+
+### Image Related:
+- Finds the source of images through reverse image search supporting various formats using [SauceNao](https://saucenao.com/).
+- Asks questions regarding uploaded images using [Gemini AI](https://gemini.google.com/).
+
+### OSINT Integration:
+- Integrates with [Sherlock](https://github.com/sherlock-project/sherlock)
+- Integrates with modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python)
+- Integrates with [socialscan](https://github.com/iojw/socialscan).
+-  Integrates with [Maigret](https://github.com/soxoj/maigret) - Not compatible with modern python versions, must enable [manually](
+- Logs servers the bot is in upon startup, including user's Discord IDs, server nickname, Discord username, and status/bio, into a folder called Servers as .json files.
+
+### Voice Chat:
+- Joins any voice channel in the server without the need for manual intervention.
+- Utilizes text-to-speech in voice chat, allowing the bot to vocalize text input.
+- Plays audio from the various [sources](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) in voice chat using the ```play``` command.
+
+### Video Manipulation:
+- Generates [nightcore](https://en.wikipedia.org/wiki/Nightcore) videos or slowed-down videos using the [Spedup-Slowed-MV](https://github.com/sankeer28/Spedup-Slowed-MV) project.
+
 
 ## Running locally
 ### Installing Dependencies
