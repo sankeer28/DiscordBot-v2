@@ -95,7 +95,7 @@ cd DiscordBot-v2
 ```bash
 python bot.py
 ```
-## Usage: type !help for all commands. There is **NO** prefix for any commands.
+## Usage: type !help for all commands. There is **NO** prefix for all commands.
 | Command                               | Description                                                                                                    |
 |---------------------------------------|----------------------------------------------------------------------------------------------------------------|
 | `drake <prompt>`                      | Generate content using the Generative AI model. **Name of bot is customizable**.                                |
