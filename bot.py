@@ -120,6 +120,7 @@ def get_google_api_key():
 MAX_HISTORY_LENGTH = 10 #--------------------------------------------------------------------CHANGE MAX HISTORY (OPTIONAL)
 
 #----------------------------------------------------------------------------------------------------------
+#                                               AI CHATBOT
 #----------------------------------------------------------------------------------------------------------
 
 @bot.event
@@ -220,7 +221,7 @@ async def split_and_send_messages(message_system, text, max_length):
         await message_system.channel.send(string)
         
 #----------------------------------------------------------------------------------------------------------
-#                                         FUNCTIONS FOR COMMANDS
+#                                        COMMANDS
 #----------------------------------------------------------------------------------------------------------
 
 @bot.command(name="image")
@@ -427,12 +428,17 @@ async def stop(ctx: commands.Context):
         print(e)
         
 #----------------------------------------------------------------------------------------------------------
+#                                               PING
 #----------------------------------------------------------------------------------------------------------
 
         
 @bot.tree.command(name='ping', description='Display the latency of the bot!')
 async def ping(interaction: discord.Interaction):
     await interaction.response.send_message(f'Pong! ||{round(bot.latency * 1000)}ms||')
+    
+#----------------------------------------------------------------------------------------------------------
+#                                      DOWNLOAD VIDEOS
+#----------------------------------------------------------------------------------------------------------
     
 @bot.command()
 async def download(ctx, url: str):
@@ -458,77 +464,10 @@ async def download_video1(url):
         print(f"Error downloading video: {e}")
         return None
     
-@bot.command(name="sherlock")
-async def sherlock(ctx, username: str):
-    async with ctx.typing():
-        process = await asyncio.create_subprocess_exec(
-            'sherlock', username,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
-        while True:
-            line = await process.stdout.readline()
-            if not line:
-                break
-            decoded_line = line.decode('utf-8').strip()
-            if decoded_line: 
-                await ctx.send(decoded_line)
-        await process.wait()
-    if process.returncode != 0:
-        error = await process.stderr.read()
-        decoded_error = error.decode('utf-8').strip()
-        if decoded_error:
-            await ctx.send(f"Error: {decoded_error}")
-            
-            
-def check_site(site, username, headers, session):
-    uri_check = site["uri_check"].format(account=username)
-    try:
-        res = session.get(uri_check, headers=headers, timeout=10)
-        estring_pos = site["e_string"] in res.text
-        estring_neg = site["m_string"] in res.text
-        if res.status_code == site["e_code"] and estring_pos and not estring_neg:
-            return site["name"], uri_check
-    except:
-        pass
-    return None
-
-@bot.command()
-async def expose(ctx, username):
-    headers = {
-        "Accept": "text/html, application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "accept-language": "en-US;q=0.9,en,q=0,8",
-        "accept-encoding": "gzip, deflate",
-        "user-Agent": "Mozilla/5.0 (Windows NT 10.0;Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36",
-    }
-    async with ctx.typing():
-        with requests.Session() as session:
-            response = session.get("https://raw.githubusercontent.com/WebBreacher/WhatsMyName/main/wmn-data.json")
-            data = response.json()
-            sites = data["sites"]
-            total_sites = len(sites)
-            found_sites = 0
-            try:
-                with ThreadPoolExecutor() as executor:
-                    futures = {executor.submit(check_site, site, username, headers, session): site for site in sites}
-
-                    for future in as_completed(futures):
-                        try:
-                            result = future.result()
-                            if result:
-                                site_name, uri_check = result
-                                await ctx.send(f"- **{site_name}**: {uri_check}")
-                                found_sites += 1
-                                await asyncio.sleep(1)
-                        except:
-                            pass
-            except TimeoutError:
-                await ctx.send("Some sites took too long to respond and were skipped.")
-            if found_sites:
-                await ctx.send(f"The user **{username}** was found on {found_sites} sites.")
-            else:
-                await ctx.send(f"No sites found for the user **{username}**.")
-
+#----------------------------------------------------------------------------------------------------------
+#                                      SPEAK USING TTS
+#----------------------------------------------------------------------------------------------------------
+    
 voice_clients = {}
 
 @bot.tree.command(name="join", description="Join a specified voice channel")
@@ -576,6 +515,134 @@ async def speak(interaction: discord.Interaction, text: str):
         await asyncio.sleep(1)
     os.remove(file_path)  
     await interaction.response.send_message("Finished playing the text-to-speech message.", ephemeral=True)
+    
+
+#----------------------------------------------------------------------------------------------------------
+#                                      OSINT TOOLS
+#----------------------------------------------------------------------------------------------------------
+    
+@bot.command(name="sherlock")
+async def sherlock(ctx, username: str):
+    async with ctx.typing():
+        process = await asyncio.create_subprocess_exec(
+            'sherlock', username,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        while True:
+            line = await process.stdout.readline()
+            if not line:
+                break
+            decoded_line = line.decode('utf-8').strip()
+            if decoded_line: 
+                await ctx.send(decoded_line)
+        await process.wait()
+    if process.returncode != 0:
+        error = await process.stderr.read()
+        decoded_error = error.decode('utf-8').strip()
+        if decoded_error:
+            await ctx.send(f"Error: {decoded_error}")
+            
+
+
+def check_site(site, username, headers, session):
+    uri_check = site["uri_check"].format(account=username)
+    try:
+        res = session.get(uri_check, headers=headers, timeout=10)
+        estring_pos = site["e_string"] in res.text
+        estring_neg = site["m_string"] in res.text
+        if res.status_code == site["e_code"] and estring_pos and not estring_neg:
+            return site["name"], uri_check
+    except:
+        pass
+    return None
+@bot.command()
+async def expose(ctx, username, *args):
+    generate_html = '--html' in args
+    headers = {
+        "Accept": "text/html, application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "accept-language": "en-US;q=0.9,en,q=0,8",
+        "accept-encoding": "gzip, deflate",
+        "user-Agent": "Mozilla/5.0 (Windows NT 10.0;Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36",
+    }
+    async with ctx.typing():
+        with requests.Session() as session:
+            response = session.get("https://raw.githubusercontent.com/WebBreacher/WhatsMyName/main/wmn-data.json")
+            data = response.json()
+            sites = data["sites"]
+            total_sites = len(sites)
+            found_sites = []
+            try:
+                with ThreadPoolExecutor() as executor:
+                    futures = {executor.submit(check_site, site, username, headers, session): site for site in sites}
+
+                    for future in as_completed(futures):
+                        try:
+                            result = future.result()
+                            if result:
+                                site_name, uri_check = result
+                                found_sites.append((site_name, uri_check))
+                                if not generate_html:
+                                    await ctx.send(f"- **{site_name}**: {uri_check}")
+                                await asyncio.sleep(1)
+                        except:
+                            pass
+            except TimeoutError:
+                await ctx.send("Some sites took too long to respond and were skipped.")
+
+            if generate_html:
+                html_content = f"""
+                <html>
+                    <head>
+                        <title>Report for {username}</title>
+                        <style>
+                            body {{
+                                font-family: Arial, sans-serif;
+                            }}
+                            table {{
+                                width: 100%;
+                                border-collapse: collapse;
+                            }}
+                            th, td {{
+                                border: 1px solid #ddd;
+                                padding: 8px;
+                                text-align: left;
+                            }}
+                            th {{
+                                background-color: #f2f2f2;
+                            }}
+                        </style>
+                    </head>
+                    <body>
+                        <h1>WhatsMyName Report for {username}</h1>
+                        <table>
+                            <tr>
+                                <th>Website Name</th>
+                                <th>Profile URL</th>
+                            </tr>"""
+                for site_name, uri_check in found_sites:
+                    html_content += f"""
+                            <tr>
+                                <td>{site_name}</td>
+                                <td><a href="{uri_check}" target="_blank">{uri_check}</a></td>
+                            </tr>"""
+                html_content += """
+                        </table>
+                    </body>
+                </html>"""
+                report_file = f"{username}_report.html"
+                with open(report_file, "w") as file:
+                    file.write(html_content)
+                await ctx.send(f"HTML report for **{username}** generated.", file=discord.File(report_file))
+                os.remove(report_file)
+            else:
+                if found_sites:
+                    await ctx.send(f"The user **{username}** was found on {len(found_sites)} sites.")
+                else:
+                    await ctx.send(f"No sites found for the user **{username}**.")
+
+
+
 
 # This will only work on Python 3.10, I have not gotten it to work on other versions where the bot's other features also work. 
 # the requirement has not been added to requirements.txt, ``` pip install maigret ```  https://pypi.org/project/maigret/
@@ -745,8 +812,8 @@ async def nightcore(interaction: discord.Interaction, url: str, image_choice: ap
     os.remove(output_video)
 
 
-
 #----------------------------------------------------------------------------------------------------------
+#                                                HELP
 #----------------------------------------------------------------------------------------------------------
 @bot.command(name="!help")
 async def help_command(ctx):
@@ -767,7 +834,7 @@ async def help_command(ctx):
                      "`cat`: random cat gif.\n"
                      "`dog`: random dog gif.\n"
                      "`sherlock <username>`: returns all sites where the user has created an account. Uses [Sherlock-project](https://github.com/sherlock-project/sherlock)\n"
-                     "`expose <username>`: returns all sites where the user has created an account. Uses modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python)\n"
+                     "`expose <username> --html <--optional argument for html `: returns all sites where the user has created an account. Uses modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python)\n"
                      "`socialscan <username or email>`: accurately querying username and email usage on online platforms. uses [socialscan](https://github.com/iojw/socialscan)\n"
                      "`/join`: Joins any specified voice channel, even without joining it yourself\n"
                      "`/speak`: Says anything in voice channel you want using Microsoft's text to speech \n"
