@@ -107,7 +107,7 @@ python bot.py
 - `cat`: random cat gif.
 - `dog`: random dog gif.
 - `sherlock <username>`: returns all sites where the user has created an account. Uses [Sherlock-project](https://github.com/sherlock-project/sherlock)
-- `expose <username>`: returns all sites where the user has created an account. Uses modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python)
+- `expose <username> --html <--optional argument for html `: returns all sites where the user has created an account. Uses modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python)
 - `socialscan <username or email>`: accurately querying username and email usage on online platforms. Uses [socialscan](https://github.com/iojw/socialscan) 
 - `/join`: Joins any specified voice channel, even without joining it yourself
 - `/speak`: Says anything in voice channel you want using Microsoft's text to speech. Uses [edge-tts](https://pypi.org/project/edge-tts/)
