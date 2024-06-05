@@ -25,7 +25,7 @@ Discord bot made using Python with many features including AI chat, music playba
 - Play the audio from the same URLs in voice chat or input a song title.
 - Ask questions regarding uploaded images.
 - Chat history is temporarily saved to memory to have more realistic conversations.
-- Integration with [Sherlock](https://github.com/sherlock-project/sherlock) and other OSINT tools.
+- Integration with [Sherlock](https://github.com/sherlock-project/sherlock) and other OSINT tools including [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python) and [socialscan](https://github.com/iojw/socialscan).
 - Ability to join any voice channel in the server without the need to join the voice channel yourself.
 - Ability to speak using text-to-speech in voice chat, allowing the bot to say whatever you want.
 - Generate nightcore videos or slowed-down videos, Uses my personal [project: Spedup-Slowed-MV](https://github.com/sankeer28/Spedup-Slowed-MV)
