@@ -12,6 +12,7 @@ import google.generativeai as genai
 import subprocess
 import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
+
 #----------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------
 
@@ -33,10 +34,10 @@ google_api_keys = [
     '', ''
 ]
 current_api_key_index = 0
-google_search_engine_id = ''
-saucenao_api_key = ''
-pexels_api_key = ''
-genai.configure(api_key="")
+google_search_engine_id = ' '
+saucenao_api_key = ' '
+pexels_api_key = ' '
+genai.configure(api_key=" ")
 
 
 #----------------------------------------------------------------------------------------------------------
@@ -60,6 +61,10 @@ async def on_ready():
         print(f'Error syncing commands: {e}')
     
     print(f'Logged in as {bot.user.name}')
+    print('Bot is currently in the following servers:')
+    for guild in bot.guilds:
+        print(f'{guild.name} - {guild.id}')
+
 
 def get_google_api_key():
     global current_api_key_index
@@ -539,8 +544,25 @@ async def maigret_search(ctx, username):
                 output_str = output.decode('utf-8')
                 await ctx.send(f"Maigret encountered an error:\n```{output_str}```")
         except Exception as e:
+            await ctx.send(f"An error occurred: {e}. If you have not already, install the library - you must use Python 3.10")
+            
+@bot.command(name="socialscan")
+async def socialscan_search(ctx, username):
+    async with ctx.typing():
+        try:
+            process = await asyncio.create_subprocess_exec(
+                'socialscan', username, '--show-urls',
+                stdout=subprocess.PIPE,  
+                stderr=subprocess.PIPE
+            )
+            indicator_msg = await ctx.send("Running SocialScan. This may take a while...")
+            output, _ = await process.communicate()
+            output_str = output.decode('utf-8')
+            await ctx.send(f"SocialScan output for {username}:\n```{output_str}```")
+            
+            await indicator_msg.delete() 
+        except Exception as e:
             await ctx.send(f"An error occurred: {e}")
-
 
 #----------------------------------------------------------------------------------------------------------
 #                                              NIGHTCORE                               
@@ -683,6 +705,7 @@ async def help_command(ctx):
                      "`dog`: random dog gif.\n"
                      "`sherlock <username>`: returns all sites where the user has created an account. Uses [Sherlock-project](https://github.com/sherlock-project/sherlock)\n"
                      "`expose <username>`: returns all sites where the user has created an account. Uses modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python)\n"
+                     "`socialscan <username or email>`: accurately querying username and email usage on online platforms. uses [socialscan](https://github.com/iojw/socialscan)\n"
                      "`/join`: Joins any specified voice channel, even without joining it yourself\n"
                      "`/speak`: Says anything in voice channel you want using Microsoft's text to speech \n"
                      "`/nightcore`: creates nightcore video or slowed down video given URL. Uses my personal [project](https://github.com/sankeer28/Spedup-Slowed-MV) \n"
@@ -697,7 +720,7 @@ async def help_command(ctx):
 #                                         DISCORD TOKEN
 #----------------------------------------------------------------------------------------------------------
 
-bot.run('  ')
+bot.run('')
 
 #----------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------
