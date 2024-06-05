@@ -511,6 +511,35 @@ async def speak(interaction: discord.Interaction, text: str):
     os.remove(file_path)  
     await interaction.response.send_message("Finished playing the text-to-speech message.", ephemeral=True)
 
+# This will only work on Python 3.10, I have not gotten it to work on other versions where the bot's other features also work. 
+# the requirement has not been added to requirements.txt, ``` pip install maigret ```  https://pypi.org/project/maigret/
+@bot.command(name="maigret")
+async def maigret_search(ctx, username):
+    async with ctx.typing():
+        try:
+            process = await asyncio.create_subprocess_exec(
+                'maigret', '--tags', 'us', '--all-sites', username, '--pdf',
+                stdout=subprocess.PIPE,  
+                stderr=subprocess.PIPE
+            )
+            indicator_msg = await ctx.send("Processing Report. This may take a while...")
+            while True:
+                stdout = await process.stdout.readline()
+                if not stdout:
+                    break
+                print(stdout.decode().strip())
+            await process.wait() 
+            if process.returncode == 0:
+                pdf_path = f"reports/report_{username}.pdf" 
+                await ctx.send(file=discord.File(pdf_path))
+                os.remove(pdf_path)
+                await indicator_msg.delete()
+            else:
+                output, _ = await process.communicate()
+                output_str = output.decode('utf-8')
+                await ctx.send(f"Maigret encountered an error:\n```{output_str}```")
+        except Exception as e:
+            await ctx.send(f"An error occurred: {e}")
 
 
 #----------------------------------------------------------------------------------------------------------
