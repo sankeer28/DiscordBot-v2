@@ -37,7 +37,7 @@ Discord bot made using Python with many features including AI chat, music playba
 - Integrates with [Sherlock](https://github.com/sherlock-project/sherlock)
 - Integrates with modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python)
 - Integrates with [socialscan](https://github.com/iojw/socialscan).
--  Integrates with [Maigret](https://github.com/soxoj/maigret) - Not compatible with modern python versions, must enable [manually](
+-  Integrates with [Maigret](https://github.com/soxoj/maigret) - **Not compatible with modern Python versions, must enable** [manually](https://github.com/sankeer28/DiscordBot-v2/blob/main/README.md#to-use-the-command-maigret-)
 - Logs servers the bot is in upon startup, including user's Discord IDs, server nickname, Discord username, and status/bio, into a folder called Servers as .json files.
 
 ### Voice Chat:
