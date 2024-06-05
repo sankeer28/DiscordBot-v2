@@ -26,7 +26,7 @@ Discord bot made using Python with many features including AI chat, music playba
 - Returns images from [Google](https://www.google.com).
 - Searches [YouTube](https://www.youtube.com) for videos.
 - Returns images from [Pexels](https://www.pexels.com).
-- Downloads URLs from various sources including [SoundCloud](https://soundcloud.com), [YouTube](https://www.youtube.com), [TikTok](https://www.tiktok.com), [Twitter](https://twitter.com), [Instagram](https://www.instagram.com), and [more](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
+- Downloads URLs from various sources including [SoundCloud](https://soundcloud.com), [YouTube](https://www.youtube.com), [TikTok](https://www.tiktok.com), [Twitter](https://twitter.com), [Instagram](https://www.instagram.com), and [more](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md). Video length must be under 30 mins, as large file sizes are limited by Discord.
 
 
 ### Image Related 🖼️:
