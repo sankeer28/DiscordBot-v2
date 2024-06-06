@@ -819,32 +819,38 @@ async def nightcore(interaction: discord.Interaction, url: str, image_choice: ap
 async def help_command(ctx):
     embed = discord.Embed(
         title="Bot Commands",
-        description=("Here are the available commands:\n\n"
-                     "`drake <prompt>`: Generate content using the Generative AI model.\n"
-                     "`image <query>`: Search for images using Google Custom Search.\n"
-                     "`google <query>`: Perform a Google search.\n"
-                     "`youtube <query>`: Search for videos on YouTube.\n"
-                     "`sauce <image_url>`: Perform a reverse image search using SauceNAO.\n"
-                     "`pexels <query>`: Search for images on Pexels.\n"
-                     "`play <URL or query>`: Play music from the provided URL or search on YT. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)\n"
-                     "`pause`: Pause the currently playing music.\n"
-                     "`resume`: Resume the paused music.\n"
-                     "`stop`: Stop the music and disconnect from the voice channel.\n"
-                     "`download <URL>`: Downloads and returns video to chat. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)\n"
-                     "`cat`: random cat gif.\n"
-                     "`dog`: random dog gif.\n"
-                     "`sherlock <username>`: returns all sites where the user has created an account. Uses [Sherlock-project](https://github.com/sherlock-project/sherlock)\n"
-                     "`expose <username> --html <--optional argument for html `: returns all sites where the user has created an account. Uses modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python)\n"
-                     "`socialscan <username or email>`: accurately querying username and email usage on online platforms. uses [socialscan](https://github.com/iojw/socialscan)\n"
-                     "`/join`: Joins any specified voice channel, even without joining it yourself\n"
-                     "`/speak`: Says anything in voice channel you want using Microsoft's text to speech \n"
-                     "`/nightcore`: creates nightcore video or slowed down video given URL. Uses my personal [project](https://github.com/sankeer28/Spedup-Slowed-MV) \n"
-
-                     ),
+        description="Here are the available commands:",
         color=discord.Color.blue()
     )
+
+    commands_list = [
+        ("`drake <prompt>`", "Generate content using the Generative AI model."),
+        ("`image <query>`", "Search for images using Google Custom Search."),
+        ("`google <query>`", "Perform a Google search."),
+        ("`youtube <query>`", "Search for videos on YouTube."),
+        ("`sauce <image_url>`", "Perform a reverse image search using SauceNAO."),
+        ("`pexels <query>`", "Search for images on Pexels."),
+        ("`play <URL or query>`", "Play music from the provided URL or search on YT. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)."),
+        ("`pause`", "Pause the currently playing music."),
+        ("`resume`", "Resume the paused music."),
+        ("`stop`", "Stop the music and disconnect from the voice channel."),
+        ("`download <URL>`", "Downloads and returns video to chat. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)."),
+        ("`cat`", "Random cat gif."),
+        ("`dog`", "Random dog gif."),
+        ("`sherlock <username>`", "Returns all sites where the user has created an account. Uses [Sherlock-project](https://github.com/sherlock-project/sherlock)."),
+        ("`expose <username> --html`", "Returns all sites where the user has created an account. Uses modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python)."),
+        ("`socialscan <username or email>`", "Accurately querying username and email usage on online platforms. Uses [socialscan](https://github.com/iojw/socialscan)."),
+        ("`/join`", "Joins any specified voice channel, even without joining it yourself."),
+        ("`/speak`", "Says anything in voice channel you want using Microsoft's text to speech."),
+        ("`/nightcore`", "Creates nightcore video or slowed down video given URL. Uses my personal [project](https://github.com/sankeer28/Spedup-Slowed-MV).")
+    ]
+
+    for cmd, desc in commands_list:
+        embed.add_field(name=cmd, value=desc, inline=False)
+
     await ctx.send(embed=embed)
 
+    
     
 #----------------------------------------------------------------------------------------------------------
 #                                         DISCORD TOKEN
