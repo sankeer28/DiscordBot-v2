@@ -1,11 +1,9 @@
-```
-  ____  _                       _ ____        _     __     ______  
- |  _ \(_)___  ___ ___  _ __ __| | __ )  ___ | |_   \ \   / /___ \ 
- | | | | / __|/ __/ _ \| '__/ _` |  _ \ / _ \| __|___\ \ / /  __) |
- | |_| | \__ \ (_| (_) | | | (_| | |_) | (_) | ||_____\ V /  / __/ 
- |____/|_|___/\___\___/|_|  \__,_|____/ \___/ \__|     \_/  |_____|
-                                                                   
-```
+
+
+<p align="center">
+  <img src="https://github.com/sankeer28/DiscordBot-v2/assets/112449287/131c6205-9301-4d15-b67a-96c3aa9e87dc" width="300" />
+</p>
+
 Discord bot made using Python with many features including AI chat, music playback, video downloader, OSINT tools, and more.
 
 ## Getting Started
