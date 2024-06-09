@@ -10,8 +10,13 @@ Discord bot made using Python with many features including AI chat, music playba
 
 ### Prerequisites
 
-- Python 3.12 🐍** 3.10 if you want the OSINT tool [Maigret](https://github.com/sankeer28/DiscordBot-v2/tree/main?tab=readme-ov-file#to-use-the-command-maigret-)
-- FFMPEG installed onto system PATH
+- Python 3.12+ 🐍** 3.10 if you want the OSINT tool [Maigret](https://github.com/sankeer28/DiscordBot-v2/tree/main?tab=readme-ov-file#to-use-the-command-maigret-)
+- [FFMPEG](https://ffmpeg.org/): installed onto system PATH
+  - Linux (apt): 
+  ```sudo apt install ffmpeg```
+  - MacOS (via homebrew): 
+      ```brew install ffmpeg```
+  - Windows: [guide](https://www.hostinger.com/tutorials/how-to-install-ffmpeg#:~:text=successfully%20installed%20FFmpeg.-,how%20to%20install%20ffmpeg%20on%20windows,-Before%20the%20installation): 
 - pip
 
 # Features
