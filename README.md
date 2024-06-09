@@ -60,7 +60,7 @@ https://github.com/sankeer28/DiscordBot-v2/assets/112449287/32db7e02-0132-462f-9
   - `level`: Check your current level and experience points.
   - `leaderboard`: View the top 10 users by level.
 - All user levels and experience points are saved locally to a .json file to ensure persistence across bot restarts.
-- 
+  
 ## Running locally
 ### Installing Dependencies
 
