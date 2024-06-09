@@ -12,6 +12,7 @@ import google.generativeai as genai
 import subprocess
 import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
+import json
 
 #----------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------
@@ -30,14 +31,14 @@ ffmpeg_options = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconne
 #                                         API KEYS
 #----------------------------------------------------------------------------------------------------------
 google_api_keys = [
-    ' ', ' ',
-    ' ', ' '
+    '', '',
+    '', ''
 ]
 current_api_key_index = 0
-google_search_engine_id = ' '
-saucenao_api_key = ' '
-pexels_api_key = ' '
-genai.configure(api_key=" ")
+google_search_engine_id = ''
+saucenao_api_key = ''
+pexels_api_key = ''
+genai.configure(api_key="")
 
 
 #----------------------------------------------------------------------------------------------------------
@@ -68,9 +69,7 @@ async def on_ready():
 #----------------------------------------------------------------------------------------------------------
 #                                          SERVER LOGS
 #----------------------------------------------------------------------------------------------------------
-       
-
-import json       
+           
 if not os.path.exists('servers'):
     os.makedirs('servers')
     
@@ -810,6 +809,81 @@ async def nightcore(interaction: discord.Interaction, url: str, image_choice: ap
     os.remove(audio_filename)
     os.remove(image_filename)
     os.remove(output_video)
+    
+#----------------------------------------------------------------------------------------------------------
+#                                                LEVELS
+#----------------------------------------------------------------------------------------------------------
+
+levels_file = "levels.json"
+if os.path.exists(levels_file):
+    with open(levels_file, "r") as file:
+        levels = json.load(file)
+else:
+    levels = {}
+
+def save_levels():
+    with open(levels_file, "w") as file:
+        json.dump(levels, file)
+def add_experience(user_id, exp):
+    if str(user_id) not in levels:
+        levels[str(user_id)] = {"exp": 0, "level": 1}
+    levels[str(user_id)]["exp"] += exp
+    current_level = levels[str(user_id)]["level"]
+    new_level = int(levels[str(user_id)]["exp"] ** (1/4))
+    if new_level > current_level:
+        levels[str(user_id)]["level"] = new_level
+        return new_level
+    return None
+
+@bot.event
+async def on_message(message):
+    if message.author.bot:
+        return
+    exp = 10 
+    new_level = add_experience(message.author.id, exp)
+    
+    if new_level:
+        embed = discord.Embed(
+            title="Level Up!",
+            description=f"Congratulations {message.author.mention}, you reached level {new_level}!",
+            color=0x00ff00
+        )
+        embed.set_thumbnail(url=message.author.avatar.url)
+        embed.add_field(name="Level", value=new_level, inline=True)
+        embed.add_field(name="Experience", value=levels[str(message.author.id)]["exp"], inline=True)
+        await message.channel.send(embed=embed)
+    
+    save_levels()
+    await bot.process_commands(message)
+@bot.command(name="level")
+async def level(ctx):
+    user_id = str(ctx.author.id)
+    if user_id in levels:
+        exp = levels[user_id]["exp"]
+        level = levels[user_id]["level"]
+        embed = discord.Embed(
+            title="Your Level",
+            description=f"{ctx.author.mention}, you are at level {level} with {exp} experience points.",
+            color=0x00ff00
+        )
+        embed.set_thumbnail(url=ctx.author.avatar.url)
+        await ctx.send(embed=embed)
+    else:
+        await ctx.send(f"{ctx.author.mention}, you have no experience yet.")
+
+@bot.command(name="leaderboard")
+async def leaderboard(ctx):
+    sorted_levels = sorted(levels.items(), key=lambda x: x[1]["level"], reverse=True)
+    embed = discord.Embed(
+        title="Leaderboard",
+        description="Top 10 users by level",
+        color=0x00ff00
+    )
+    
+    for user_id, data in sorted_levels[:10]:  
+        user = await bot.fetch_user(int(user_id))
+        embed.add_field(name=user.name, value=f"Level {data['level']} - {data['exp']} XP", inline=False)
+    await ctx.send(embed=embed)
 
 
 #----------------------------------------------------------------------------------------------------------
@@ -842,7 +916,9 @@ async def help_command(ctx):
         ("`socialscan <username or email>`", "Accurately querying username and email usage on online platforms. Uses [socialscan](https://github.com/iojw/socialscan)."),
         ("`/join`", "Joins any specified voice channel, even without joining it yourself."),
         ("`/speak`", "Says anything in voice channel you want using Microsoft's text to speech."),
-        ("`/nightcore`", "Creates nightcore video or slowed down video given URL. Uses my personal [project](https://github.com/sankeer28/Spedup-Slowed-MV).")
+        ("`/nightcore`", "Creates nightcore video or slowed down video given URL. Uses my personal [project](https://github.com/sankeer28/Spedup-Slowed-MV)."),
+        ("`level`", "View your level"),
+        ("`leaderboard`", "View top 10 users by xp")
     ]
 
     for cmd, desc in commands_list:
@@ -850,7 +926,6 @@ async def help_command(ctx):
 
     await ctx.send(embed=embed)
 
-    
     
 #----------------------------------------------------------------------------------------------------------
 #                                         DISCORD TOKEN
