@@ -26,7 +26,6 @@ Discord bot made using Python with many features including AI chat, music playba
 - Returns images from [Pexels](https://www.pexels.com).
 - Downloads URLs from various sources including [SoundCloud](https://soundcloud.com), [YouTube](https://www.youtube.com), [TikTok](https://www.tiktok.com), [Twitter](https://twitter.com), [Instagram](https://www.instagram.com), and [more](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md). Video length must be under 30 mins, as large file sizes are limited by Discord.
 
-
 ### Image Related 🖼️:
 - Finds the source of images through reverse image search supporting various formats using [SauceNao](https://saucenao.com/).
 - Asks questions regarding uploaded images using [Gemini AI](https://gemini.google.com/).
@@ -113,6 +112,8 @@ python bot.py
 | `/join`                               | Joins any specified voice channel, even without joining it yourself                                             |
 | `/speak`                              | Says anything in voice channel you want using Microsoft's text to speech. Uses [edge-tts](https://pypi.org/project/edge-tts/) |
 | `/nightcore`                          | Creates nightcore video or slowed down video given URL. Uses my personal [project](https://github.com/sankeer28/Spedup-Slowed-MV) |
+| `level`                          | View your level |
+| `leaderboard`                         | View top 10 users by xp |
 
 ## To use the command maigret <username>
 - You are required to use Python 3.10 and must manually install maigret by ``` pip install maigret ```
