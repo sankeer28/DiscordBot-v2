@@ -51,7 +51,7 @@ https://github.com/sankeer28/DiscordBot-v2/assets/112449287/32db7e02-0132-462f-9
 
 ### Video Manipulation 📹:
 - Generates [nightcore](https://en.wikipedia.org/wiki/Nightcore) videos or slowed-down videos using my project [Spedup-Slowed-MV](https://github.com/sankeer28/Spedup-Slowed-MV).
-- 
+  
 ### Leveling System 📈:
 - Users gain experience points (EXP) by sending messages.
 - Levels are calculated using a formula based on the fourth root of total EXP.
