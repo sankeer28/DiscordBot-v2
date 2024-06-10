@@ -77,7 +77,7 @@ https://github.com/sankeer28/DiscordBot-v2/assets/112449287/32db7e02-0132-462f-9
 - **Saucenao API Key**: Get from the SauceNAO website. [Guide](https://saucenao.com/user.php?page=search-api)
 - **Pexels API Key**: Get from the Pexels website. [Guide](https://www.pexels.com/api/documentation/)
 - **Google Gemini AI API KEY:** Get from Google AI Studio. [Here](https://aistudio.google.com/app/apikey)
-- **Giphy API KEY: ** Get from Giphy [website](https://developers.giphy.com/dashboard/)
+- **Giphy API KEY:** Get from Giphy [website](https://developers.giphy.com/dashboard/)
 
 ### Running the Bot
 
