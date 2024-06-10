@@ -884,8 +884,25 @@ async def leaderboard(ctx):
         user = await bot.fetch_user(int(user_id))
         embed.add_field(name=user.name, value=f"Level {data['level']} - {data['exp']} XP", inline=False)
     await ctx.send(embed=embed)
+    
+#----------------------------------------------------------------------------------------------------------
+#                                                AUTO JOIN VC
+#----------------------------------------------------------------------------------------------------------
+@bot.event
+async def on_voice_state_update(member, before, after):
+    if before.channel is None and after.channel is not None:
+        await join_voice_channel(after.channel)
 
-
+async def join_voice_channel(channel):
+    if bot.voice_clients:
+        await bot.voice_clients[0].disconnect()
+    vc = await channel.connect()
+    voice_clients[channel.guild.id] = vc
+    if channel.guild.id not in loop_status:
+        loop_status[channel.guild.id] = False
+    await asyncio.sleep(10)
+    if len(channel.members) == 1: 
+        await vc.disconnect()
 #----------------------------------------------------------------------------------------------------------
 #                                                HELP
 #----------------------------------------------------------------------------------------------------------
