@@ -10,3 +10,4 @@ sherlock-project
 argparse
 edge-tts
 socialscan
+spacy
