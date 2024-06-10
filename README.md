@@ -24,6 +24,7 @@ Discord bot made using Python with many features including AI chat, music playba
 - Casual chat with the bot using its name. Not required to call its name if using the bot's DMs.
 - Immediate responses using Gemini AI.
 - Conversation is temporarily saved to memory for realism.
+- Random chance to get a gif from Giphy based on the context of what is being said in chat using NLP.
 
 ### Media Retrieval 📺:
 - Returns images from [Google](https://www.google.com).
@@ -67,11 +68,7 @@ https://github.com/sankeer28/DiscordBot-v2/assets/112449287/32db7e02-0132-462f-9
 - All user levels and experience points are saved locally to a .json file to ensure persistence even after bot restarts.
   
 ## Running locally
-### Installing Dependencies
 
-```bash
-pip install -r requirements.txt
-```
 
 ### Getting API Keys
 
@@ -80,6 +77,7 @@ pip install -r requirements.txt
 - **Saucenao API Key**: Get from the SauceNAO website. [Guide](https://saucenao.com/user.php?page=search-api)
 - **Pexels API Key**: Get from the Pexels website. [Guide](https://www.pexels.com/api/documentation/)
 - **Google Gemini AI API KEY:** Get from Google AI Studio. [Here](https://aistudio.google.com/app/apikey)
+- **Giphy API KEY: ** Get from Giphy [website](https://developers.giphy.com/dashboard/)
 
 ### Running the Bot
 
@@ -95,8 +93,18 @@ git clone https://github.com/sankeer28/DiscordBot-v2.git
 cd DiscordBot-v2
 ```
 
+### Installing Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+Install NLP model
+```bash
+python -m spacy download en_core_web_sm
+```
+
 3. Fill in the API Keys on missing lines.
-     - Line 26: Gemini API key, Google API keys, Google search engine id, Saucenao API, Pexels API
+     - Line 26: Gemini API key, Google API keys, Google search engine id, Saucenao API, Pexels API, Gify API
      - Last Line: Discord bot token
 4. Rename the bot:
    - Line 83: change the bot's name from drake to your liking
