@@ -19,7 +19,7 @@ Discord bot made using Python with many features including AI chat, music playba
   - Windows: [guide](https://www.hostinger.com/tutorials/how-to-install-ffmpeg#:~:text=successfully%20installed%20FFmpeg.-,how%20to%20install%20ffmpeg%20on%20windows,-Before%20the%20installation): 
 - pip
 
-# Features
+## Features
 ### Chat Interaction 💬:
 - Casual chat with the bot using its name. Not required to call its name if using the bot's DMs.
 - Immediate responses using Gemini AI.
