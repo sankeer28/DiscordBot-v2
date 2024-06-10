@@ -13,6 +13,7 @@ import subprocess
 import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
 import json
+import spacy
 
 #----------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------
@@ -903,6 +904,49 @@ async def join_voice_channel(channel):
     await asyncio.sleep(10)
     if len(channel.members) == 1: 
         await vc.disconnect()
+
+#----------------------------------------------------------------------------------------------------------
+#                                                AUTO GIF
+#----------------------------------------------------------------------------------------------------------
+
+nlp = spacy.load('en_core_web_sm')
+
+def extract_context(message):
+    doc = nlp(message.content)
+    meaningful_chunks = [chunk.text for chunk in doc.noun_chunks if chunk.root.pos_ in ('NOUN', 'PROPN', 'ADJ')]
+    meaningful_words = [token.text for token in doc if token.pos_ in ('NOUN', 'PROPN', 'ADJ', 'VERB') and token.lower_ not in ('he', 'she', 'it', 'i', 'we', 'you', 'they')]
+    if meaningful_words:
+        context_word = random.choice(meaningful_words)
+    else:
+        context_word = None
+    context_words = meaningful_chunks + [context_word] if context_word else meaningful_chunks
+    if context_words:
+        return ' '.join(context_words)
+    return None
+
+
+def get_gif_url_for_context(context):
+    url = f'https://api.giphy.com/v1/gifs/search?api_key={GIPHY_API_KEY}&q={context}&limit=10'
+    response = requests.get(url)
+    data = response.json()
+    if data['data']:
+        gif_data = random.choice(data['data'])
+        return gif_data['images']['downsized_large']['url']
+    return None
+
+
+@bot.event
+async def on_message(message):
+    if message.author == bot.user:
+        return
+    if random.choice([True, False]):
+        context = extract_context(message)
+        if context:
+            gif_url = get_gif_url_for_context(context)
+            if gif_url:
+                await message.channel.send(gif_url)
+
+
 #----------------------------------------------------------------------------------------------------------
 #                                                HELP
 #----------------------------------------------------------------------------------------------------------
