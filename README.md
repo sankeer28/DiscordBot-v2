@@ -24,7 +24,7 @@ Discord bot made using Python with many features including AI chat, music playba
 - Casual chat with the bot using its name. Not required to call its name if using the bot's DMs.
 - Immediate responses using Gemini AI.
 - Conversation is temporarily saved to memory for realism.
-- Random chance to get a gif from Giphy based on the context of what is being said in chat using NLP.
+- 50/50 chance to get a GIF from Giphy based on the context of what is being said in chat using NLP.
 
 ### Media Retrieval 📺:
 - Returns images from [Google](https://www.google.com).
