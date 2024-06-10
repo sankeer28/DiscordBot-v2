@@ -25,6 +25,7 @@ Discord bot made using Python with many features including AI chat, music playba
 - Immediate responses using Gemini AI.
 - Conversation is temporarily saved to memory for realism.
 - 50/50 chance to get a GIF from Giphy based on the context of what is being said in chat using NLP.
+  - [SpaCy](https://spacy.io/) NLP identifies the most relevant parts of a message by focusing on nouns, proper nouns, adjectives, and verbs, excluding personal pronouns which might not contribute much to the context.
 
 ### Media Retrieval 📺:
 - Returns images from [Google](https://www.google.com).
