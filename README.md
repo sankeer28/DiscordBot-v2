@@ -23,7 +23,7 @@ Discord bot made using Python with many features including AI chat, music playba
 ### Chat Interaction 💬:
 - Casual chat with the bot using its name. Not required to call its name if using the bot's DMs.
 - Immediate responses using Gemini AI.
-- Chat history is temporarily saved to memory for more realistic conversations.
+- Conversation is temporarily saved to memory for realism.
 
 ### Media Retrieval 📺:
 - Returns images from [Google](https://www.google.com).
