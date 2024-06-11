@@ -45,6 +45,7 @@ Discord bot made using Python with many features including AI chat, music playba
 - Logs info of members in servers, including the user's Discord IDs, server nickname, Discord username, and status/bio, into a folder called Servers as .json files.
 
 ### Voice Chat 🎙️:
+- Auto join/leave vc
 <details>
   <summary>Utilizes text-to-speech in voice chat, allowing the bot to vocalize text input</summary>
 
