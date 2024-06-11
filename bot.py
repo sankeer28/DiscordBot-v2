@@ -26,7 +26,7 @@ voice_clients = {}
 yt_dl_options = {"format": "bestaudio/best"}
 ytdl = yt_dlp.YoutubeDL(yt_dl_options)
 ffmpeg_options = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn -filter:a "volume=0.25"'}
-GIPHY_API_KEY = ''
+
 
 #----------------------------------------------------------------------------------------------------------
 #                                         API KEYS
@@ -40,6 +40,7 @@ google_search_engine_id = ''
 saucenao_api_key = ''
 pexels_api_key = ''
 genai.configure(api_key="")
+GIPHY_API_KEY = ''
 
 
 #----------------------------------------------------------------------------------------------------------
@@ -70,7 +71,9 @@ async def on_ready():
 #----------------------------------------------------------------------------------------------------------
 #                                          SERVER LOGS
 #----------------------------------------------------------------------------------------------------------
-           
+       
+
+     
 if not os.path.exists('servers'):
     os.makedirs('servers')
     
@@ -390,6 +393,29 @@ async def play(ctx: commands.Context):
         voice_clients[ctx.guild.id].play(player, after=lambda e: play_next(ctx))
     except Exception as e:
         print(e)
+        
+voice_clients = {}
+@bot.event
+async def on_voice_state_update(member, before, after):
+    if member.bot:
+        return
+    guild_id = member.guild.id
+
+    if after.channel and not before.channel:
+        if guild_id in voice_clients:
+            return
+        voice_channel = after.channel
+        try:
+            voice_client = await voice_channel.connect()
+            voice_clients[guild_id] = voice_client
+        except Exception as e:
+            print(e)
+    
+    if before.channel and not after.channel and guild_id in voice_clients:
+        voice_client = voice_clients[guild_id]
+        if len(voice_client.channel.members) == 1:  
+            await voice_client.disconnect()
+            del voice_clients[guild_id]
 
 def play_next(ctx):
     if loop_status[ctx.guild.id]:
@@ -885,26 +911,8 @@ async def leaderboard(ctx):
         user = await bot.fetch_user(int(user_id))
         embed.add_field(name=user.name, value=f"Level {data['level']} - {data['exp']} XP", inline=False)
     await ctx.send(embed=embed)
-    
-#----------------------------------------------------------------------------------------------------------
-#                                                AUTO JOIN VC
-#----------------------------------------------------------------------------------------------------------
-@bot.event
-async def on_voice_state_update(member, before, after):
-    if before.channel is None and after.channel is not None:
-        await join_voice_channel(after.channel)
 
-async def join_voice_channel(channel):
-    if bot.voice_clients:
-        await bot.voice_clients[0].disconnect()
-    vc = await channel.connect()
-    voice_clients[channel.guild.id] = vc
-    if channel.guild.id not in loop_status:
-        loop_status[channel.guild.id] = False
-    await asyncio.sleep(10)
-    if len(channel.members) == 1: 
-        await vc.disconnect()
-
+   
 #----------------------------------------------------------------------------------------------------------
 #                                                AUTO GIF
 #----------------------------------------------------------------------------------------------------------
@@ -919,33 +927,30 @@ def extract_context(message):
         context_word = random.choice(meaningful_words)
     else:
         context_word = None
-    context_words = meaningful_chunks + [context_word] if context_word else meaningful_chunks
+    context_words = meaningful_chunks + ([context_word] if context_word else [])
     if context_words:
         return ' '.join(context_words)
     return None
-
-
 def get_gif_url_for_context(context):
     url = f'https://api.giphy.com/v1/gifs/search?api_key={GIPHY_API_KEY}&q={context}&limit=10'
     response = requests.get(url)
     data = response.json()
-    if data['data']:
+    if data.get('data'):
         gif_data = random.choice(data['data'])
         return gif_data['images']['downsized_large']['url']
     return None
-
 
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
         return
+    await bot.process_commands(message)
     if random.choice([True, False]):
         context = extract_context(message)
         if context:
             gif_url = get_gif_url_for_context(context)
             if gif_url:
                 await message.channel.send(gif_url)
-
 
 #----------------------------------------------------------------------------------------------------------
 #                                                HELP
@@ -992,7 +997,7 @@ async def help_command(ctx):
 #                                         DISCORD TOKEN
 #----------------------------------------------------------------------------------------------------------
 
-bot.run('')
+bot.run(' ')
 
 #----------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------
