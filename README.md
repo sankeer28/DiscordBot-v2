@@ -57,7 +57,17 @@ https://github.com/sankeer28/DiscordBot-v2/assets/112449287/32db7e02-0132-462f-9
 - Plays audio from the various [sources](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) in voice chat using the ```play``` command.
     - Ability to infinitely loop any audio source played in voice channel 🔁.
 - For songs in a Youtube playlist, the URL of the specific song is automatically detected.
+  - **Example:**
+    - Original Playlist URL:
+    ```
+    https://www.youtube.com/watch?v=pDddlvCfTiw&list=RDqRaqfpKPjIc&index=5
+    ```
+    - Extracted Video URL: everything after '&list' is removed
+    ```
+    https://www.youtube.com/watch?v=pDddlvCfTiw
+    ```
 
+This process ensures that only the specific video is played, even if the provided URL is part of a playlist.
 ### Video Manipulation 📹:
 - Generates [nightcore](https://en.wikipedia.org/wiki/Nightcore) videos or slowed-down videos using my project [Spedup-Slowed-MV](https://github.com/sankeer28/Spedup-Slowed-MV).
   
