@@ -366,6 +366,7 @@ async def pexels_search(ctx: commands.Context, *, query: str):
 
 loop_status = {}
 
+
 @bot.command(name="play")
 async def play(ctx: commands.Context):
     try:
@@ -377,7 +378,12 @@ async def play(ctx: commands.Context):
     try:
         query = ctx.message.content.split(maxsplit=1)[1]
         if query.startswith('http'):
-            url = query
+            video_id = re.search(r"v=([^&]+)", query)
+            if video_id:
+                video_id = video_id.group(1)
+                url = f"https://www.youtube.com/watch?v={video_id}"
+            else:
+                url = query 
             message = await ctx.send(f"Playing from provided URL: {url}")
         else:
             with ytdl:
@@ -393,6 +399,7 @@ async def play(ctx: commands.Context):
         voice_clients[ctx.guild.id].play(player, after=lambda e: play_next(ctx))
     except Exception as e:
         print(e)
+        
         
 voice_clients = {}
 @bot.event
