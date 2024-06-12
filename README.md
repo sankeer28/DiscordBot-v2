@@ -22,9 +22,9 @@ Discord bot made using Python with many features including AI chat, music playba
 ## Features
 ### Chat Interaction 💬:
 - Casual chat with the bot using its name. Not required to call its name if using the bot's DMs.
-- Immediate responses using Gemini AI.
-- Conversation is temporarily saved to memory for realism.
-- 50/50 chance to get a GIF from Giphy based on the context of what is being said in chat using Natural Language Processing (NLP).
+- Immediate responses using Gemini AI 🤖.
+- Conversation is temporarily saved to memory for realism .
+- 50/50 chance to get a GIF from Giphy based on the context of what is being said in chat using Natural Language Processing (NLP) 🧠.
   - [SpaCy](https://spacy.io/) NLP identifies the most relevant parts of a message by focusing on random nouns, proper nouns, adjectives, and verbs, excluding personal pronouns which might not contribute much to the context.
 
 ### Media Retrieval 📺:
@@ -38,7 +38,7 @@ Discord bot made using Python with many features including AI chat, music playba
 - Asks questions regarding uploaded images using [Gemini AI](https://gemini.google.com/).
 
 ### OSINT Tools 🔓:
-- Integrates with [Sherlock](https://github.com/sherlock-project/sherlock)
+- Integrates with [Sherlock](https://github.com/sherlock-project/sherlock) 🔍
 - Integrates with modified [WhatsMyName](https://github.com/C3n7ral051nt4g3ncy/WhatsMyName-Python). Returns either links to chat or creates html file with --html argument.
 - Integrates with [socialscan](https://github.com/iojw/socialscan).
 - Integrates with [Maigret](https://github.com/soxoj/maigret) - **Not compatible with modern Python versions, must enable** [manually](https://github.com/sankeer28/DiscordBot-v2/tree/main?tab=readme-ov-file#to-use-the-command-maigret-)
@@ -56,7 +56,7 @@ https://github.com/sankeer28/DiscordBot-v2/assets/112449287/32db7e02-0132-462f-9
 
 - Plays audio from the various [sources](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) in voice chat using the ```play``` command.
     - Ability to infinitely loop any audio source played in voice channel 🔁.
-- For songs in a Youtube playlist, the URL of the specific song is automatically detected.
+- For songs in a YouTube playlist, the URL of the specific song is automatically detected.
   - **Example:**
     - Original Playlist URL:
     ```
@@ -72,7 +72,7 @@ This process ensures that only the specific video is played, even if the provide
 - Generates [nightcore](https://en.wikipedia.org/wiki/Nightcore) videos or slowed-down videos using my project [Spedup-Slowed-MV](https://github.com/sankeer28/Spedup-Slowed-MV).
   
 ### Leveling System 📈:
-- Users gain xp by sending messages.
+- Users gain XP by sending messages.
 - Users receive a notification in the current chat when they level up.
 - Commands available:
   - `level`: Check your current level and experience points.
@@ -116,10 +116,10 @@ python -m spacy download en_core_web_sm
 ```
 
 3. Fill in the API Keys on missing lines.
-     - Line 26: Gemini API key, Google API keys, Google search engine id, Saucenao API, Pexels API, Gify API
+     - Required APIs: Gemini API key, Google API keys, Google search engine ID, Saucenao API, Pexels API, Gify API
      - Last Line: Discord bot token
 4. Rename the bot:
-   - Line 83: change the bot's name from drake to your liking
+   - change the bot's name from drake to your liking
      
 5. Run the bot:
 
