@@ -53,7 +53,7 @@ safety_settings = [
     {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold":  "BLOCK_NONE"}
 ]
 text_model = genai.GenerativeModel(model_name="gemini-pro", safety_settings=safety_settings)
-image_model = genai.GenerativeModel(model_name="gemini-pro-vision", safety_settings=safety_settings)
+image_model = genai.GenerativeModel(model_name="gemini-1.5-flash", safety_settings=safety_settings)
 
 @bot.event
 async def on_ready():
@@ -123,14 +123,96 @@ def get_google_api_key():
 MAX_HISTORY_LENGTH = 10 #--------------------------------------------------------------------CHANGE MAX HISTORY (OPTIONAL)
 
 #----------------------------------------------------------------------------------------------------------
-#                                               AI CHATBOT
+#                                               AI CHATBOT | LEVELS | AUTO GIF
 #----------------------------------------------------------------------------------------------------------
+
+# Initialize Spacy
+nlp = spacy.load('en_core_web_sm')
+
+# Levels management
+levels_file = "levels.json"
+if os.path.exists(levels_file):
+    with open(levels_file, "r") as file:
+        levels = json.load(file)
+else:
+    levels = {}
+
+def save_levels():
+    with open(levels_file, "w") as file:
+        json.dump(levels, file)
+
+def add_experience(user_id, exp):
+    if str(user_id) not in levels:
+        levels[str(user_id)] = {"exp": 0, "level": 1}
+    levels[str(user_id)]["exp"] += exp
+    current_level = levels[str(user_id)]["level"]
+    new_level = int(levels[str(user_id)]["exp"] ** (1/4))
+    if new_level > current_level:
+        levels[str(user_id)]["level"] = new_level
+        return new_level
+    return None
+
+#----------------------------------------------------------------------------------------------------------
+#                                        AUTO GIF
+#----------------------------------------------------------------------------------------------------------
+def extract_context(message):
+    doc = nlp(message.content)
+    meaningful_chunks = [chunk.text for chunk in doc.noun_chunks if chunk.root.pos_ in ('NOUN', 'PROPN', 'ADJ')]
+    meaningful_words = [token.text for token in doc if token.pos_ in ('NOUN', 'PROPN', 'ADJ', 'VERB') and token.lower_ not in ('he', 'she', 'it', 'i', 'we', 'you', 'they')]
+    if meaningful_words:
+        context_word = random.choice(meaningful_words)
+    else:
+        context_word = None
+    context_words = meaningful_chunks + ([context_word] if context_word else [])
+    if context_words:
+        return ' '.join(context_words)
+    return None
+
+
+def get_gif_url_for_context(context):
+    url = f'https://api.giphy.com/v1/gifs/search?api_key={GIPHY_API_KEY}&q={context}&limit=10'
+    response = requests.get(url)
+    data = response.json()
+    if data.get('data'):
+        gif_data = random.choice(data['data'])
+        return gif_data['images']['downsized_large']['url']
+    return None
+
 
 @bot.event
 async def on_message(message):
-    if message.author == bot.user or message.mention_everyone:
+    if message.author.bot or message.mention_everyone:
         return
-    if bot.user.mentioned_in(message) or isinstance(message.channel, discord.DMChannel) or 'drake' in message.content.lower(): #----------------------CHANGE BOT's NAME
+    
+    await bot.process_commands(message)
+    
+    if random.choice([False, True]):
+        context = extract_context(message)
+        if context:
+            gif_url = get_gif_url_for_context(context)
+            if gif_url:
+                await message.channel.send(gif_url) 
+
+    exp = 10
+    new_level = add_experience(message.author.id, exp)
+    
+    if new_level:
+        embed = discord.Embed(
+            title="Level Up!",
+            description=f"Congratulations {message.author.mention}, you reached level {new_level}!",
+            color=0x00ff00
+        )
+        embed.set_thumbnail(url=message.author.avatar.url)
+        embed.add_field(name="Level", value=new_level, inline=True)
+        embed.add_field(name="Experience", value=levels[str(message.author.id)]["exp"], inline=True)
+        await message.channel.send(embed=embed)
+    
+    save_levels()
+    
+#----------------------------------------------------------------------------------------------------------
+#                                        AI CHAT
+#----------------------------------------------------------------------------------------------------------
+    if bot.user.mentioned_in(message) or isinstance(message.channel, discord.DMChannel) or 'drake' in message.content.lower():
         cleaned_text = clean_discord_message(message.content)
         async with message.channel.typing():
             if message.attachments:
@@ -158,22 +240,58 @@ async def on_message(message):
                 response_text = await generate_response_with_text(get_formatted_message_history(message.author.id))
                 update_message_history(message.author.id, response_text)
                 await split_and_send_messages(message, response_text, 1700)
+    
+    
     if 'cat' in message.content.lower():
         gif_url = await fetch_random_cat_gif()
         if gif_url:
             await message.channel.send(gif_url)
+    
     if 'dog' in message.content.lower():
         gif_url = await fetch_random_dog_gif()
         if gif_url:
             await message.channel.send(gif_url)
-    await bot.process_commands(message)
 
+#----------------------------------------------------------------------------------------------------------
+#                                        LEVELS
+#----------------------------------------------------------------------------------------------------------
+@bot.command(name="level")
+async def level(ctx):
+    user_id = str(ctx.author.id)
+    if user_id in levels:
+        exp = levels[user_id]["exp"]
+        level = levels[user_id]["level"]
+        embed = discord.Embed(
+            title="Your Level",
+            description=f"{ctx.author.mention}, you are at level {level} with {exp} experience points.",
+            color=0x00ff00
+        )
+        embed.set_thumbnail(url=ctx.author.avatar.url)
+        await ctx.send(embed=embed)
+    else:
+        await ctx.send(f"{ctx.author.mention}, you have no experience yet.")
+
+# Command to show leaderboard
+@bot.command(name="leaderboard")
+async def leaderboard(ctx):
+    sorted_levels = sorted(levels.items(), key=lambda x: x[1]["level"], reverse=True)
+    embed = discord.Embed(
+        title="Leaderboard",
+        description="Top 10 users by level",
+        color=0x00ff00
+    )
+
+    for user_id, data in sorted_levels[:10]:  
+        user = await bot.fetch_user(int(user_id))
+        embed.add_field(name=user.name, value=f"Level {data['level']} - {data['exp']} XP", inline=False)
+    await ctx.send(embed=embed)
+
+# Helper functions
 async def fetch_random_cat_gif():
     async with aiohttp.ClientSession() as session:
         async with session.get('https://api.thecatapi.com/v1/images/search?mime_types=gif') as response:
             data = await response.json()
             return data[0]['url'] if data else None
-
 
 async def fetch_random_dog_gif():
     try:
@@ -851,44 +969,7 @@ async def nightcore(interaction: discord.Interaction, url: str, image_choice: ap
     
 
    
-#----------------------------------------------------------------------------------------------------------
-#                                                AUTO GIF
-#----------------------------------------------------------------------------------------------------------
 
-nlp = spacy.load('en_core_web_sm')
-
-def extract_context(message):
-    doc = nlp(message.content)
-    meaningful_chunks = [chunk.text for chunk in doc.noun_chunks if chunk.root.pos_ in ('NOUN', 'PROPN', 'ADJ')]
-    meaningful_words = [token.text for token in doc if token.pos_ in ('NOUN', 'PROPN', 'ADJ', 'VERB') and token.lower_ not in ('he', 'she', 'it', 'i', 'we', 'you', 'they')]
-    if meaningful_words:
-        context_word = random.choice(meaningful_words)
-    else:
-        context_word = None
-    context_words = meaningful_chunks + ([context_word] if context_word else [])
-    if context_words:
-        return ' '.join(context_words)
-    return None
-def get_gif_url_for_context(context):
-    url = f'https://api.giphy.com/v1/gifs/search?api_key={GIPHY_API_KEY}&q={context}&limit=10'
-    response = requests.get(url)
-    data = response.json()
-    if data.get('data'):
-        gif_data = random.choice(data['data'])
-        return gif_data['images']['downsized_large']['url']
-    return None
-
-@bot.event
-async def on_message(message):
-    if message.author == bot.user:
-        return
-    await bot.process_commands(message)
-    if random.choice([True, False]):
-        context = extract_context(message)
-        if context:
-            gif_url = get_gif_url_for_context(context)
-            if gif_url:
-                await message.channel.send(gif_url)
 
 #----------------------------------------------------------------------------------------------------------
 #                                                HELP
@@ -921,7 +1002,9 @@ async def help_command(ctx):
         ("`socialscan <username or email>`", "Accurately querying username and email usage on online platforms. Uses [socialscan](https://github.com/iojw/socialscan)."),
         ("`/join`", "Joins any specified voice channel, even without joining it yourself."),
         ("`/speak`", "Says anything in voice channel you want using Microsoft's text to speech."),
-        ("`/nightcore`", "Creates nightcore video or slowed down video given URL. Uses my personal [project](https://github.com/sankeer28/Spedup-Slowed-MV).")
+        ("`/nightcore`", "Creates nightcore video or slowed down video given URL. Uses my personal [project](https://github.com/sankeer28/Spedup-Slowed-MV)."),
+        ("`level`", "View your level"),
+        ("`leaderboard`", "View top 10 users by xp")
     ]
 
     for cmd, desc in commands_list:
