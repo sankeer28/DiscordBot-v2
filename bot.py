@@ -366,7 +366,6 @@ async def pexels_search(ctx: commands.Context, *, query: str):
 
 loop_status = {}
 
-
 @bot.command(name="play")
 async def play(ctx: commands.Context):
     try:
@@ -399,7 +398,6 @@ async def play(ctx: commands.Context):
         voice_clients[ctx.guild.id].play(player, after=lambda e: play_next(ctx))
     except Exception as e:
         print(e)
-        
         
 voice_clients = {}
 @bot.event
@@ -444,6 +442,13 @@ async def pause(ctx: commands.Context):
     except Exception as e:
         print(e)
 
+@bot.command(name="stop")
+async def pause(ctx: commands.Context):
+    try:
+        voice_clients[ctx.guild.id].pause()
+    except Exception as e:
+        print(e)
+
 @bot.command(name="resume")
 async def resume(ctx: commands.Context):
     try:
@@ -451,7 +456,7 @@ async def resume(ctx: commands.Context):
     except Exception as e:
         print(e)
 
-@bot.command(name="stop")
+@bot.command(name="leave")
 async def stop(ctx: commands.Context):
     try:
         voice_clients[ctx.guild.id].stop()
@@ -980,7 +985,8 @@ async def help_command(ctx):
         ("`play <URL or query>`", "Play music from the provided URL or search on YT. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)."),
         ("`pause`", "Pause the currently playing music."),
         ("`resume`", "Resume the paused music."),
-        ("`stop`", "Stop the music and disconnect from the voice channel."),
+        ("`stop`", "Stop the music"),
+        ("`leave`", "Disconnect from voice"),
         ("`download <URL>`", "Downloads and returns video to chat. Supports URLs from these [websites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)."),
         ("`cat`", "Random cat gif."),
         ("`dog`", "Random dog gif."),
@@ -1004,7 +1010,7 @@ async def help_command(ctx):
 #                                         DISCORD TOKEN
 #----------------------------------------------------------------------------------------------------------
 
-bot.run(' ')
+bot.run('')
 
 #----------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------
