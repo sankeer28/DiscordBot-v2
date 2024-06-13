@@ -71,13 +71,6 @@ This process ensures that only the specific video is played, even if the provide
 ### Video Manipulation 📹:
 - Generates [nightcore](https://en.wikipedia.org/wiki/Nightcore) videos or slowed-down videos using my project [Spedup-Slowed-MV](https://github.com/sankeer28/Spedup-Slowed-MV).
   
-### Leveling System 📈:
-- Users gain XP by sending messages.
-- Users receive a notification in the current chat when they level up.
-- Commands available:
-  - `level`: Check your current level and experience points.
-  - `leaderboard`: View the top 10 users by level.
-- All user levels and experience points are saved locally to a .json file to ensure persistence even after bot restarts.
   
 ## Running locally
 
@@ -145,8 +138,7 @@ python bot.py
 | `/join`                               | Joins any specified voice channel, even without joining it yourself                                             |
 | `/speak`                              | Says anything in voice channel you want using Microsoft's text to speech. Uses [edge-tts](https://pypi.org/project/edge-tts/) |
 | `/nightcore`                          | Creates nightcore video or slowed down video given URL. Uses my personal [project](https://github.com/sankeer28/Spedup-Slowed-MV) |
-| `level`                          | View your level |
-| `leaderboard`                         | View top 10 users by xp |
+
 
 ## To use the command maigret <username>
 - You are required to use Python 3.10 and must manually install maigret by ``` pip install maigret ```
