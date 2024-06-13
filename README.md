@@ -54,6 +54,14 @@ https://github.com/sankeer28/DiscordBot-v2/assets/112449287/32db7e02-0132-462f-9
 
  </details>
 
+ ### Leveling System 📈:
+- Users gain XP by sending messages.
+- Users receive a notification in the current chat when they level up.
+- Commands available:
+  - `level`: Check your current level and experience points.
+  - `leaderboard`: View the top 10 users by level.
+- All user levels and experience points are saved locally to a .json file to ensure persistence even after bot restarts.
+
 - Plays audio from the various [sources](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) in voice chat using the ```play``` command.
     - Ability to infinitely loop any audio source played in voice channel 🔁.
 - For songs in a YouTube playlist, the URL of the specific song is automatically detected.
