@@ -53,15 +53,6 @@ Discord bot made using Python with many features including AI chat, music playba
 https://github.com/sankeer28/DiscordBot-v2/assets/112449287/32db7e02-0132-462f-9786-edba88e0509b
 
  </details>
-
- ### Leveling System 📈:
-- Users gain XP by sending messages.
-- Users receive a notification in the current chat when they level up.
-- Commands available:
-  - `level`: Check your current level and experience points.
-  - `leaderboard`: View the top 10 users by level.
-- All user levels and experience points are saved locally to a .json file to ensure persistence even after bot restarts.
-
 - Plays audio from the various [sources](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) in voice chat using the ```play``` command.
     - Ability to infinitely loop any audio source played in voice channel 🔁.
 - For songs in a YouTube playlist, the URL of the specific song is automatically detected.
@@ -76,6 +67,16 @@ https://github.com/sankeer28/DiscordBot-v2/assets/112449287/32db7e02-0132-462f-9
     ```
 
 This process ensures that only the specific video is played, even if the provided URL is part of a playlist.
+
+
+### Leveling System 📈:
+- Users gain XP by sending messages.
+- Users receive a notification in the current chat when they level up.
+- Commands available:
+  - `level`: Check your current level and experience points.
+  - `leaderboard`: View the top 10 users by level.
+- All user levels and experience points are saved locally to a .json file to ensure persistence even after bot restarts.
+  
 ### Video Manipulation 📹:
 - Generates [nightcore](https://en.wikipedia.org/wiki/Nightcore) videos or slowed-down videos using my project [Spedup-Slowed-MV](https://github.com/sankeer28/Spedup-Slowed-MV).
   
